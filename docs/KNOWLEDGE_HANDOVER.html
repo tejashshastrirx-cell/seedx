@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SEED X Knowledge Handover</title>
+<style>
+@font-face { font-family: 'Manrope'; src: url('handover/manrope.woff2') format('woff2'); font-weight: 200 800; }
+:root {
+  --forest: #174B35; --forest-2: #1f5a3d; --mint: #E6F1E7; --gold: #E5A63B; --gold-ink: #7f5310;
+  --cream: #F5F0E4; --ink: #1d2621; --muted: #56625b; --line: #d9d3c4; --red: #a33a2a; --amber: #8a5a00;
+}
+@page { size: A4; margin: 16mm 15mm 16mm 15mm; }
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { margin: 0; font-family: 'Manrope', system-ui, sans-serif; color: var(--ink); font-size: 10.2pt; line-height: 1.5; background: #fff; }
+h1, h2, h3 { color: var(--forest); line-height: 1.2; text-wrap: balance; margin: 0; }
+h2 { font-size: 19pt; font-weight: 800; margin-bottom: 4mm; padding-bottom: 2mm; border-bottom: 2px solid var(--gold); }
+h3 { font-size: 12pt; font-weight: 800; margin: 5mm 0 1.5mm; }
+p { margin: 0 0 2.5mm; }
+ul, ol { margin: 0 0 3mm; padding-left: 5mm; }
+li { margin-bottom: 1mm; }
+code { font-family: ui-monospace, Menlo, monospace; font-size: 8.8pt; background: var(--mint); padding: 0.3mm 1.2mm; border-radius: 1mm; word-break: break-all; }
+.section { break-before: page; }
+.eyebrow { text-transform: uppercase; letter-spacing: 0.14em; font-size: 8pt; font-weight: 800; color: var(--gold-ink); margin-bottom: 1.5mm; }
+.lead { font-size: 11.5pt; color: var(--muted); margin-bottom: 5mm; }
+table { width: 100%; border-collapse: collapse; margin: 2mm 0 4mm; font-size: 9pt; }
+th, td { text-align: left; vertical-align: top; padding: 1.6mm 2mm; border-bottom: 1px solid var(--line); }
+th { background: var(--forest); color: #fff; font-weight: 700; }
+tr { break-inside: avoid; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+.box { border: 1px solid var(--line); border-radius: 2.5mm; padding: 3.5mm 4mm; break-inside: avoid; background: #fff; }
+.box.tint { background: var(--mint); border-color: #c9ddcd; }
+.box.warn { background: #fbf3e2; border-color: #ecd6a6; }
+.box h3 { margin-top: 0; }
+.pill { display: inline-block; font-size: 7.6pt; font-weight: 800; padding: 0.4mm 2mm; border-radius: 9mm; white-space: nowrap; }
+.ok { background: #dcefe0; color: #135a33; } .part { background: #fbeccc; color: var(--amber); } .no { background: #f6dcd6; color: var(--red); } .owner { background: #e2e7f5; color: #2c4386; }
+figure { margin: 0 0 4mm; break-inside: avoid; }
+figure img { width: 100%; border: 1px solid var(--line); border-radius: 2mm; display: block; }
+figcaption { font-size: 8.4pt; color: var(--muted); margin-top: 1mm; }
+.phones { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 4mm; align-items: start; }
+.flow { display: flex; flex-wrap: wrap; gap: 1.5mm; align-items: center; margin: 2mm 0 4mm; }
+.flow span { background: var(--mint); border: 1px solid #c9ddcd; border-radius: 1.5mm; padding: 1mm 2.2mm; font-size: 8.8pt; font-weight: 700; color: var(--forest); }
+.flow b { color: var(--gold-ink); }
+.small { font-size: 8.6pt; color: var(--muted); }
+.kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; margin: 3mm 0 5mm; }
+.kpi { background: var(--mint); border-radius: 2.5mm; padding: 3mm; }
+.kpi b { display: block; font-size: 18pt; color: var(--forest); font-variant-numeric: tabular-nums; line-height: 1.1; }
+.kpi span { font-size: 8.4pt; color: var(--muted); }
+
+/* cover */
+.cover { height: 263mm; display: flex; flex-direction: column; justify-content: space-between; background: var(--forest); color: var(--cream); border-radius: 4mm; padding: 16mm 14mm; position: relative; overflow: hidden; }
+.cover::after { content: ""; position: absolute; right: -40mm; bottom: -40mm; width: 150mm; height: 150mm; border-radius: 50%; background: radial-gradient(circle, rgba(229,166,59,.35), rgba(229,166,59,0) 70%); }
+.cover .brand { font-size: 13pt; font-weight: 800; letter-spacing: 0.06em; }
+.cover .brand em { color: var(--gold); font-style: normal; }
+.cover h1 { color: #fff; font-size: 40pt; font-weight: 800; letter-spacing: -0.02em; margin: 6mm 0 4mm; }
+.cover .tag { font-size: 16pt; color: var(--gold); font-weight: 700; }
+.cover .meta { font-size: 10pt; line-height: 1.7; position: relative; z-index: 1; }
+.cover .meta b { color: #fff; }
+.cover .lede { font-size: 12pt; max-width: 135mm; color: #e7e1d2; margin-top: 6mm; }
+.arch { width: 100%; height: auto; display: block; margin: 2mm 0 4mm; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="brand">SEED <em>X</em></div>
+  <div>
+    <div class="eyebrow" style="color:var(--gold)">Project knowledge handover</div>
+    <h1>SEED X</h1>
+    <div class="tag">Better Farming Starts with Better Connections.</div>
+    <div class="tag" style="font-size:12pt;color:#f1e6cc;margin-top:2mm">From Farm to Future.</div>
+    <p class="lede">Everything learned while building SEED X: what it is, how it works, what is live, what works and what does not, and what to do next. Written so a new team member or a new Claude account can build the presentation without the original chat.</p>
+  </div>
+  <div class="meta">
+    <div>Created &amp; Developed by <b>Tejash Shastri</b> and <b>Shaurya</b></div>
+    <div>Live site: <b>https://seedxsss.tejash-shastri-rx.workers.dev</b></div>
+    <div>Code: <b>github.com/tejashshastrirx-cell/seedx</b> (branch <b>main</b>)</div>
+    <div>Status as of <b>31 October 2026</b></div>
+  </div>
+</div>
+
+<!-- 1 SUMMARY -->
+<div class="section">
+  <div class="eyebrow">01 · One-page summary</div>
+  <h2>SEED X in one page</h2>
+  <p class="lead">A farmer-first agricultural commerce platform for India that connects harvest supply with real buyer demand, shows farmers what they actually take home, and pools deliveries between nearby farms when it really saves money.</p>
+  <div class="grid2">
+    <div class="box"><h3>The problem</h3>
+      <ul><li>Small farmers sell through layers of middlemen and rarely see the true buyer price.</li>
+      <li>They cannot easily compare offers after transport, packing and handling costs.</li>
+      <li>Small loads make transport expensive; neighbouring farms ship separately.</li>
+      <li>Prices, seeds and government schemes are scattered, undated or unverified, and mostly in English.</li></ul></div>
+    <div class="box tint"><h3>The SEED X answer</h3>
+      <ul><li><b>Direct market access</b>: listings, buyer requirements, offers, counter-offers, orders with a full timeline.</li>
+      <li><b>NetBack intelligence</b>: farmer net = gross − seller-paid costs, shown separately from buyer landed cost.</li>
+      <li><b>ClusterCart logistics</b>: pools nearby compatible harvests only when ≥5% cheaper, and explains every decision.</li>
+      <li><b>Kisan services</b>: seed store with honest verification badges, dated mandi prices with sources, official scheme links.</li></ul></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><b>10</b><span>Indian languages in native scripts</span></div>
+    <div class="kpi"><b>46</b><span>crops in 8 categories, names in all 10 languages</span></div>
+    <div class="kpi"><b>40</b><span>database tables, all protected by row-level security</span></div>
+    <div class="kpi"><b>227</b><span>automated tests passing (72 unit · 141 database · 14 browser)</span></div>
+  </div>
+  <table>
+    <tr><th style="width:28%">Item</th><th>Status</th></tr>
+    <tr><td>Live website</td><td><span class="pill ok">LIVE</span> https://seedxsss.tejash-shastri-rx.workers.dev (Cloudflare Workers, auto-deploys from GitHub main)</td></tr>
+    <tr><td>Database &amp; backend</td><td><span class="pill ok">LIVE</span> Supabase project <code>jssvwvhqlmijxujquksw</code> (Mumbai region), 7 migrations applied</td></tr>
+    <tr><td>Core journeys</td><td><span class="pill ok">TESTED</span> listing → offer → accept → transport → delivery → completion; verified in a real browser on the live database</td></tr>
+    <tr><td>Email verification</td><td><span class="pill owner">OWNER ACTION</span> works, but Supabase URL settings must point at the live site; production needs own SMTP</td></tr>
+    <tr><td>Payments, SMS, live mandi feed</td><td><span class="pill no">NOT BUILT</span> need providers / API keys</td></tr>
+  </table>
+</div>
+
+<!-- 2 PRODUCT STORY -->
+<div class="section">
+  <div class="eyebrow">02 · Product story</div>
+  <h2>Who SEED X serves</h2>
+  <table>
+    <tr><th style="width:20%">Role</th><th style="width:40%">What they do on SEED X</th><th>How they get the role</th></tr>
+    <tr><td><b>Farmer</b></td><td>List harvests (crop, variety, grade, quantity, price floor, dates, photos, private pickup address), answer offers, see NetBack, track orders and earnings, manage My Clients.</td><td>Self-service, active right after email verification.</td></tr>
+    <tr><td><b>Buyer</b></td><td>Retailers, restaurants, hostels, hotels, canteens. Browse/filter the marketplace, post requirements, make offers, run ClusterCart, track purchases, manage My Suppliers.</td><td>Self-service after email verification.</td></tr>
+    <tr><td><b>Seed seller</b></td><td>List seed products with lot, germination, expiry and certification reference; manage stock; fulfil seed orders (pay on delivery).</td><td>Requested, then approved by an admin.</td></tr>
+    <tr><td><b>Logistics partner</b></td><td>See assigned jobs; exact addresses appear only once pickup is scheduled; mark in transit.</td><td>Requested, then approved by an admin.</td></tr>
+    <tr><td><b>Landowner</b></td><td>Publish land availability and receive enquiries (no legal lease).</td><td>Requested, then approved.</td></tr>
+    <tr><td><b>Admin / support</b></td><td>Approve roles, moderate, verify seed certificates, review schemes, import prices, manage the crop catalogue, read audit log.</td><td>Only granted by the owner in the database; every admin action needs two-factor login (MFA).</td></tr>
+  </table>
+  <div class="grid2">
+    <div class="box"><h3>Brand &amp; identity</h3>
+      <ul><li>Name: <b>SEED X</b> (earlier working name KHETSETU, fully retired).</li>
+      <li>Tagline: <i>Better Farming Starts with Better Connections.</i> Supporting line: <i>From Farm to Future.</i></li>
+      <li>Palette: forest green #174B35, harvest gold #E5A63B, cream #F5F0E4, white, mint #E6F1E7. Font: Manrope + Noto scripts.</li>
+      <li>Visual: photoreal golden-hour farm hero with live rain/dust weather effect (Auto · Clear · Dust · Rain).</li></ul></div>
+    <div class="box"><h3>Team</h3>
+      <ul><li><b>Tejash Shastri</b>: Founder, Creator &amp; Product Lead.</li>
+      <li><b>Shaurya</b>: Co-developer &amp; Technical Collaborator.</li>
+      <li><b>Dhruv</b>: fictional farmer guide character used in onboarding ("Namaste! I am Dhruv").</li></ul>
+      <p class="small">Honesty rules built into the product: never invent prices, weather, counts, savings or certifications; demo data is always labelled "Demo"; transport costs are labelled estimates.</p></div>
+  </div>
+</div>
+
+<!-- 3 FEATURES -->
+<div class="section">
+  <div class="eyebrow">03 · Features</div>
+  <h2>What is built</h2>
+  <div class="grid2">
+    <div class="box"><h3>Marketplace</h3><p>Harvest listings and buyer requirements in two tabs. Filters: category, crop, state, grade, minimum quantity, price range, harvest date, hide demo records; sort by newest, price, quantity or ending soon; pagination; saved searches (per account) and recent searches (on the device).</p></div>
+    <div class="box"><h3>Offers &amp; orders</h3><p>Buyers offer on listings; farmers accept, reject or counter (versioned). Accepting reserves stock atomically, so the same stock can never be sold twice. Orders keep a snapshot of agreed terms and a permanent timeline: confirmed → pickup scheduled → in transit → delivered → completed, or cancelled / disputed.</p></div>
+    <div class="box"><h3>NetBack</h3><p>Shows gross value, each seller-paid cost (packing, handling, transport if seller pays) and the farmer's estimated net, separately from the buyer's landed cost. All money is stored in whole paise to avoid rounding errors.</p></div>
+    <div class="box"><h3>ClusterCart</h3><p>Deterministic matching engine (not AI). Applies hard rules first (crop, variety, grade, dates, freshness, price floor, transit time) with reason codes, builds candidate pickups, compares separate vs pooled transport (road distance ≈ straight line × 1.3, default rate card), recommends pooling only if ≥5% cheaper and within transit limits. Each farmer still accepts their own offer.</p></div>
+    <div class="box"><h3>My Clients / My Suppliers</h3><p>Farmers see buyers, buyers see farmers. Relationship stage is computed from real trading history: lead → saved → enquiry → active order → existing client → repeat client. Favourites and private notes that only the owner can ever see.</p></div>
+    <div class="box"><h3>Notifications</h3><p>Database-backed, real-time bell. Categories (offers, orders, seeds, ClusterCart, listings, account, security), unread / archived views, archive, delete, mark all read, duplicate-proof. Preferences for optional categories; orders, account and security always delivered. Email channel recorded but not sent until SMTP exists.</p></div>
+    <div class="box"><h3>Command centres</h3><p>Dashboard per role with real numbers only: Farmer Command Centre, Buyer Procurement Centre, Seed Seller Centre, Logistics Centre, Admin entry.</p></div>
+    <div class="box"><h3>Kisan services</h3><p>Seed store (badges say exactly what was verified), mandi price explorer (date, source, unit, freshness; currently sample data + MSP rows marked "verification pending"), 6 official government schemes (PM-KISAN, PMFBY, KCC, Soil Health Card, e-NAM, PM-KUSUM), land workspace.</p></div>
+  </div>
+  <h3>Crop catalogue (database-driven, admin-managed)</h3>
+  <p class="small">Vegetables: tomato, potato, onion, cauliflower, cabbage, brinjal, okra, green chilli, capsicum, cucumber, carrot, radish, spinach, peas, other. Fruits: mango, banana, apple, guava, papaya, pomegranate, grapes, watermelon, other. Grains: wheat, paddy, rice, maize, barley, millets, bajra, other. Pulses: chickpea, lentils, pigeon pea, green gram, black gram, other. Oilseeds: mustard, groundnut, soybean, sesame, sunflower, safflower, other. Plus cotton. Every crop has its name in all ten languages; admins add or switch off crops at <code>/admin/catalogue</code>.</p>
+  <h3>Ten languages</h3>
+  <p class="small">English, हिन्दी Hindi, বাংলা Bengali, తెలుగు Telugu, मराठी Marathi, தமிழ் Tamil, ગુજરાતી Gujarati, ಕನ್ನಡ Kannada, മലയാളം Malayalam, ਪੰਜਾਬੀ Punjabi. Picker shows native names; choice saved on the device and in the account. Core journeys are 100% translated in all ten; other screens fall back to English (Hindi ≈ 94% of all text, the other eight ≈ 44%). All non-English text is machine-assisted and needs native-speaker review.</p>
+</div>
+
+<!-- 4 HOW IT WORKS -->
+<div class="section">
+  <div class="eyebrow">04 · How it works</div>
+  <h2>Architecture</h2>
+  <svg class="arch" viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg" font-family="Manrope, sans-serif" font-size="12">
+    <rect x="10" y="20" width="200" height="120" rx="10" fill="#E6F1E7" stroke="#174B35"/>
+    <text x="110" y="45" text-anchor="middle" font-weight="800" fill="#174B35">User's browser / phone</text>
+    <text x="110" y="68" text-anchor="middle" fill="#1d2621">React 19 + Vite + TypeScript</text>
+    <text x="110" y="86" text-anchor="middle" fill="#1d2621">10 languages · Tailwind</text>
+    <text x="110" y="104" text-anchor="middle" fill="#1d2621">Canvas weather · Three.js</text>
+    <text x="110" y="122" text-anchor="middle" fill="#1d2621">publishable key + login token</text>
+    <rect x="10" y="190" width="200" height="90" rx="10" fill="#fbf3e2" stroke="#7f5310"/>
+    <text x="110" y="215" text-anchor="middle" font-weight="800" fill="#7f5310">Cloudflare Workers</text>
+    <text x="110" y="236" text-anchor="middle" fill="#1d2621">serves the built site (dist)</text>
+    <text x="110" y="254" text-anchor="middle" fill="#1d2621">security headers · SPA routing</text>
+    <text x="110" y="272" text-anchor="middle" fill="#1d2621">worker: seedxsss</text>
+    <rect x="290" y="190" width="170" height="90" rx="10" fill="#fff" stroke="#56625b"/>
+    <text x="375" y="215" text-anchor="middle" font-weight="800" fill="#1d2621">GitHub: seedx</text>
+    <text x="375" y="236" text-anchor="middle" fill="#1d2621">push to main →</text>
+    <text x="375" y="254" text-anchor="middle" fill="#1d2621">Cloudflare builds &amp;</text>
+    <text x="375" y="272" text-anchor="middle" fill="#1d2621">deploys automatically</text>
+    <rect x="530" y="10" width="220" height="280" rx="10" fill="#174B35"/>
+    <text x="640" y="36" text-anchor="middle" font-weight="800" fill="#E5A63B">Supabase (Mumbai)</text>
+    <text x="640" y="62" text-anchor="middle" fill="#F5F0E4">Postgres: 40 tables, RLS on all</text>
+    <text x="640" y="82" text-anchor="middle" fill="#F5F0E4">26 server functions (RPCs)</text>
+    <text x="640" y="102" text-anchor="middle" fill="#F5F0E4">state machines · audit log</text>
+    <text x="640" y="132" text-anchor="middle" fill="#F5F0E4">Auth: email + password,</text>
+    <text x="640" y="150" text-anchor="middle" fill="#F5F0E4">email verification, TOTP MFA</text>
+    <text x="640" y="180" text-anchor="middle" fill="#F5F0E4">Storage: harvest photos,</text>
+    <text x="640" y="198" text-anchor="middle" fill="#F5F0E4">private documents</text>
+    <text x="640" y="228" text-anchor="middle" fill="#F5F0E4">Realtime: notifications</text>
+    <text x="640" y="258" text-anchor="middle" fill="#F5F0E4">Edge Function: run-clustercart</text>
+    <line x1="210" y1="80" x2="528" y2="80" stroke="#174B35" stroke-width="2" marker-end="url(#a)"/>
+    <text x="370" y="72" text-anchor="middle" fill="#174B35" font-weight="700">HTTPS API calls (RLS checks every row)</text>
+    <line x1="110" y1="188" x2="110" y2="142" stroke="#7f5310" stroke-width="2" marker-end="url(#b)"/>
+    <text x="118" y="170" fill="#7f5310">loads site</text>
+    <line x1="288" y1="235" x2="212" y2="235" stroke="#56625b" stroke-width="2" marker-end="url(#c)"/>
+    <defs>
+      <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#174B35"/></marker>
+      <marker id="b" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#7f5310"/></marker>
+      <marker id="c" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#56625b"/></marker>
+    </defs>
+  </svg>
+  <h3>Core principle</h3>
+  <p>The database is the source of truth. The browser never sets owner IDs, prices, totals, inventory or roles directly: it calls server functions that validate everything and record events. That is why the app stays correct even if someone tampers with the browser.</p>
+  <h3>Main flow: from harvest to delivered order</h3>
+  <div class="flow"><span>Farmer lists harvest</span><b>→</b><span>Buyer posts requirement / browses</span><b>→</b><span>ClusterCart proposes pooled pickups</span><b>→</b><span>Offer (or counter-offer)</span><b>→</b><span>Farmer accepts: stock reserved atomically</span><b>→</b><span>Order + private pickup address shared</span><b>→</b><span>Transport assigned, pickup scheduled</span><b>→</b><span>In transit</span><b>→</b><span>Buyer confirms delivery</span><b>→</b><span>Completed → relationship becomes "existing client"</span></div>
+  <h3>Important rules inside the system</h3>
+  <ul>
+    <li><b>Inventory</b>: available + reserved + sold = total, enforced by the database. Two buyers accepting at the same moment: exactly one wins (tested).</li>
+    <li><b>Idempotency</b>: repeating an accept or seed order with the same key returns the same order, never a duplicate.</li>
+    <li><b>Privacy</b>: public map position rounded to about 1 km; exact pickup address only for the order's parties and the transporter while the job is active.</li>
+    <li><b>Money</b>: whole paise; quantities with explicit units (kg, quintal, tonne) and one conversion table.</li>
+    <li><b>Status mapping</b>: listing "withdrawn" = cancelled; order "in transit" = collected; "disputed" = delivery issue / failed delivery.</li>
+  </ul>
+</div>
+
+<!-- 5 SECURITY & QUALITY -->
+<div class="section">
+  <div class="eyebrow">05 · Security &amp; quality</div>
+  <h2>How it is protected and tested</h2>
+  <div class="grid2">
+    <div class="box"><h3>Security layers</h3>
+      <ul><li>Row-level security on all 40 tables; users only see and change what they are allowed to.</li>
+      <li>Column-level permissions: owners cannot edit inventory counts, verification flags or audit rows.</li>
+      <li>Roles never come from sign-up data; admin/support only via an owner-only database function.</li>
+      <li>Admin = admin role + two-factor login (MFA) on every admin action.</li>
+      <li>Email must be verified before listing, offering or ordering.</li>
+      <li>Append-only audit log for role, offer, order, moderation and admin actions.</li>
+      <li>Strict browser security headers (CSP, no framing, no-sniff); only the public key ships to the browser.</li>
+      <li>Uploads limited by type and size; users can only write in their own folder.</li></ul></div>
+    <div class="box tint"><h3>Automated tests (all passing)</h3>
+      <table style="margin:0">
+        <tr><th>Suite</th><th>Result</th></tr>
+        <tr><td>TypeScript typecheck</td><td>pass</td></tr>
+        <tr><td>Unit tests (Vitest)</td><td>72 / 72</td></tr>
+        <tr><td>Database security tests (pgTAP)</td><td>141 / 141</td></tr>
+        <tr><td>Browser tests (Playwright)</td><td>14 / 14 incl. accessibility</td></tr>
+        <tr><td>Accessibility (axe, WCAG 2.1 AA)</td><td>0 serious issues (en, hi, ta)</td></tr>
+        <tr><td>Lint</td><td>0 errors</td></tr>
+        <tr><td>Security headers / CSP check</td><td>0 violations</td></tr>
+      </table></div>
+  </div>
+  <h3>The 18 required security cases (all covered by tests)</h3>
+  <p class="small">Anonymous users can't read private data · Farmer A can't see Farmer B's records or clients · Buyer A can't see Buyer B's orders or suppliers · buyers can't edit farmer inventory · sellers can't touch other sellers' products · logistics sees only assigned jobs · no self-promotion to admin · admin actions need MFA · unverified users blocked · notifications can't be forged · private storage paths can't be guessed · tampered price/quantity rejected · overselling prevented · replays don't duplicate · illegal status changes rejected · invalid uploads denied · search reveals nothing private · untrusted origins rejected by the ClusterCart function.</p>
+  <h3>Checked on the live site (31 Oct 2026)</h3>
+  <p class="small">All main pages return 200 including direct refresh of deep links; security headers present; schemes and listings load from the database; demo farmer logs in and reaches the Farmer Command Centre; Hindi switch works; no page errors.</p>
+</div>
+
+<!-- 6 SCREENSHOTS -->
+<div class="section">
+  <div class="eyebrow">06 · Screens</div>
+  <h2>What it looks like</h2>
+  <figure><img src="handover/home.jpg" alt="SEED X home page hero"><figcaption>Home: photoreal golden-hour farm hero with rain effect and weather control (Auto / Clear / Dust / Rain).</figcaption></figure>
+  <div class="grid2">
+    <figure><img src="handover/live-marketplace.jpg" alt="Live marketplace"><figcaption>Live site: marketplace reading listings from the database.</figcaption></figure>
+    <figure><img src="handover/live-dashboard.jpg" alt="Live farmer dashboard"><figcaption>Live site: Farmer Command Centre after demo login.</figcaption></figure>
+    <figure><img src="handover/prices.jpg" alt="Mandi prices"><figcaption>Mandi price explorer with source, date and unit.</figcaption></figure>
+    <figure><img src="handover/clients.jpg" alt="My clients"><figcaption>My Clients with relationship stage and private note.</figcaption></figure>
+  </div>
+</div>
+<div class="section">
+  <div class="eyebrow">06 · Screens (continued)</div>
+  <h2>Languages and mobile</h2>
+  <div class="grid2">
+    <figure><img src="handover/home-hindi.jpg" alt="Home in Hindi"><figcaption>Home in Hindi.</figcaption></figure>
+    <figure><img src="handover/notifications.jpg" alt="Notification centre"><figcaption>Notification centre with categories and archive.</figcaption></figure>
+  </div>
+  <div class="phones">
+    <figure><img src="handover/mobile-bengali.jpg" alt="Bengali on mobile"><figcaption>Bengali on a phone.</figcaption></figure>
+    <figure><img src="handover/mobile-tamil.jpg" alt="Tamil marketplace on mobile"><figcaption>Tamil marketplace on a phone.</figcaption></figure>
+    <div class="box tint"><h3>Design notes</h3><ul class="small"><li>Works without 3D or animation (low-bandwidth friendly); motion respects "reduce motion".</li><li>Three.js used only for the ClusterCart data visual.</li><li>Spline 3D slots exist but no Spline scenes were published, so built-in fallbacks show.</li><li>No real founder portrait supplied; team cards use initials.</li></ul></div>
+  </div>
+</div>
+
+<!-- 7 WORKS / NOT -->
+<div class="section">
+  <div class="eyebrow">07 · Honest status</div>
+  <h2>What works and what does not</h2>
+  <table>
+    <tr><th style="width:38%">Area</th><th style="width:16%">Status</th><th>Notes</th></tr>
+    <tr><td>Listings, offers, counter-offers, acceptance, orders, timeline</td><td><span class="pill ok">Works</span></td><td>End-to-end browser test on live database.</td></tr>
+    <tr><td>Overselling / duplicate protection</td><td><span class="pill ok">Works</span></td><td>Simultaneous-accept race test: exactly one winner.</td></tr>
+    <tr><td>Marketplace filters, sort, saved searches</td><td><span class="pill ok">Works</span></td><td>Filters change real database results.</td></tr>
+    <tr><td>My Clients / My Suppliers</td><td><span class="pill ok">Works</span></td><td>Private notes proven invisible to the other party.</td></tr>
+    <tr><td>Notifications (in-app, real-time)</td><td><span class="pill ok">Works</span></td><td>Archive/restore tested.</td></tr>
+    <tr><td>Crop catalogue + admin page</td><td><span class="pill ok">Works</span></td><td>Admin page blocked without MFA (tested).</td></tr>
+    <tr><td>Ten languages</td><td><span class="pill part">Partial</span></td><td>Core journeys complete; some screens English; needs native review.</td></tr>
+    <tr><td>ClusterCart engine</td><td><span class="pill part">Partial on live site</span></td><td>Works in browser preview; server run needs the live URL added to <code>ALLOWED_ORIGINS</code> (owner).</td></tr>
+    <tr><td>Sign-up email verification</td><td><span class="pill owner">Owner action</span></td><td>Verification succeeds, but the link returned to localhost until Supabase URL settings point at the live site.</td></tr>
+    <tr><td>Email notifications / password reset at scale</td><td><span class="pill owner">Owner action</span></td><td>Built-in sender is rate-limited (a few per hour); needs own SMTP.</td></tr>
+    <tr><td>Mandi prices</td><td><span class="pill part">Sample data</span></td><td>Clearly labelled SAMPLE; live feed needs a data.gov.in API key.</td></tr>
+    <tr><td>Schemes</td><td><span class="pill part">Pending review</span></td><td>Official links present; "source check pending" until an admin reviews.</td></tr>
+    <tr><td>Payments</td><td><span class="pill no">Not built</span></td><td>Orders say payment is not tracked; seeds are pay on delivery.</td></tr>
+    <tr><td>SMS, live weather, seller verification filter</td><td><span class="pill no">Not built</span></td><td>Need providers / data model.</td></tr>
+    <tr><td>Separate "cancelled" / "failed delivery" statuses</td><td><span class="pill part">Mapped</span></td><td>Represented as withdrawn / disputed.</td></tr>
+    <tr><td>Backups</td><td><span class="pill owner">Owner action</span></td><td>Free plan has none; upgrade or run <code>scripts/backup.sh</code>.</td></tr>
+  </table>
+</div>
+
+<!-- 8 DEPLOYMENT & ACCOUNTS -->
+<div class="section">
+  <div class="eyebrow">08 · Deployment &amp; accounts</div>
+  <h2>Where everything lives</h2>
+  <table>
+    <tr><th style="width:26%">Thing</th><th>Where / how</th></tr>
+    <tr><td>Live site</td><td>https://seedxsss.tejash-shastri-rx.workers.dev (Cloudflare Workers, worker <code>seedxsss</code>, account tejash-shastri-rx)</td></tr>
+    <tr><td>Source code</td><td>github.com/tejashshastrirx-cell/seedx, branch <code>main</code>. Currently <b>public</b>; contains no secrets. Can be made private in repo Settings.</td></tr>
+    <tr><td>Auto-deploy</td><td>Every push to <code>main</code> → Cloudflare runs <code>npm run build</code> then <code>npx wrangler deploy</code> (config in <code>wrangler.jsonc</code>).</td></tr>
+    <tr><td>Database / auth</td><td>Supabase project "khetsetu-dev", ref <code>jssvwvhqlmijxujquksw</code>, region ap-south-1 (Mumbai), Free plan. Do not confuse with the unrelated project <code>ucjoivgcljvilstqqiyl</code> (sales_os).</td></tr>
+    <tr><td>Public build config</td><td><code>.env.production</code> in the repo holds the Supabase URL and the publishable (browser-safe) key. Never put secret/service-role keys there.</td></tr>
+    <tr><td>Edge Function</td><td><code>run-clustercart</code> (JWT required, 6 runs/min/user, origin allow-list via secret <code>ALLOWED_ORIGINS</code>).</td></tr>
+    <tr><td>Demo accounts</td><td>dhruv.farmer@, kavita.farmer@, raghav.farmer@, hostel.buyer@, restaurant.buyer@, seeds.seller@, transport.partner@, admin.demo@ — all <code>@seedx.example</code>. Password is in the developer's <code>.env.local</code> (not in this document). Admin needs TOTP set up first.</td></tr>
+    <tr><td>Downloads made</td><td><code>seed-x-source.zip</code> (clean source) and <code>seed-x-cloudflare-pages.zip</code> (ready-built site) were sent in chat.</td></tr>
+  </table>
+  <h3>Run it locally</h3>
+  <p class="small">Node 22 → <code>npm install</code> → create <code>.env.local</code> from <code>.env.example</code> → <code>npm run dev</code> (http://localhost:5173). Checks: <code>npx tsc -b</code>, <code>npm test</code>, <code>npm run db:test</code>, <code>npm run build</code>, <code>npx playwright test</code>.</p>
+  <h3>Documentation inside the repo</h3>
+  <p class="small"><code>docs/</code>: IMPLEMENTATION_AUDIT, RELEASE_REPORT, PRODUCT_SPEC, ARCHITECTURE, DATABASE_SCHEMA, SECURITY, TESTING, LANGUAGES, i18n-coverage, DEPLOYMENT, BACKUP_RESTORE, OPERATIONS, SPLINE_ASSETS, and this handover. <code>CLAUDE.md</code> has rules for any future Claude session.</p>
+</div>
+
+<!-- 9 TODO -->
+<div class="section">
+  <div class="eyebrow">09 · Next steps</div>
+  <h2>Owner to-do list (in order)</h2>
+  <ol>
+    <li><b>Supabase → Authentication → URL Configuration</b>: Site URL <code>https://seedxsss.tejash-shastri-rx.workers.dev</code>; Redirect URLs add <code>https://seedxsss.tejash-shastri-rx.workers.dev/**</code>, <code>http://localhost:5173/**</code>, <code>http://localhost:3000/**</code>. Fixes verification and reset links.</li>
+    <li><b>Supabase → Edge Functions → Secrets</b>: <code>ALLOWED_ORIGINS</code> = <code>https://seedxsss.tejash-shastri-rx.workers.dev,http://localhost:5173</code>. Enables server-side ClusterCart on the live site.</li>
+    <li><b>Own email sender (SMTP)</b> in Authentication → Emails, and turn on leaked-password protection.</li>
+    <li><b>Backups</b>: upgrade to Supabase Pro or schedule <code>scripts/backup.sh</code>; back up storage separately.</li>
+    <li><b>First real admin</b>: in SQL editor <code>select app_private.owner_grant_staff_role('you@domain', 'admin');</code>, then enrol an authenticator app in Settings.</li>
+    <li><b>Make the GitHub repo private</b> (optional; nothing secret in it).</li>
+    <li><b>Native-speaker review</b> of the 9 non-English languages.</li>
+    <li><b>data.gov.in API key</b> for live mandi prices; later: payment provider, SMS.</li>
+    <li>Optional: rename Supabase project display name khetsetu-dev → seedx; custom domain on Cloudflare.</li>
+  </ol>
+  <div class="box warn"><h3>Lessons learned during deployment</h3>
+    <ul class="small">
+      <li>Email "not verifying": verification actually succeeded; the link redirected to <code>localhost:3000</code> because Supabase Site URL was not set. Fix = step 1 above.</li>
+      <li>Cloudflare created a <b>Worker</b>, not Pages: Workers reject a <code>_redirects</code> file with <code>/* /index.html 200</code> (infinite loop). Fixed with <code>wrangler.jsonc</code> single-page-application setting.</li>
+      <li>"App is not connected to its database" on the live site: Vite needs the Supabase values at <b>build</b> time; fixed by committing public <code>.env.production</code>.</li>
+      <li>Claude sessions cannot create GitHub repos or add Cloudflare connectors; the owner creates the empty repo, Claude pushes.</li>
+    </ul></div>
+</div>
+
+<!-- 10 TIMELINE -->
+<div class="section">
+  <div class="eyebrow">10 · History</div>
+  <h2>How SEED X was built</h2>
+  <table>
+    <tr><th style="width:24%">Phase</th><th>What happened</th></tr>
+    <tr><td>1. Blueprint</td><td>84-page greenfield blueprint (originally "KHETSETU"): marketplace, NetBack, ClusterCart, seeds, prices, schemes, landowner, admin with MFA, Hindi/English.</td></tr>
+    <tr><td>2. Foundation</td><td>New dedicated Supabase project in Mumbai. Schema, row-level security, atomic offer acceptance, storage, realtime, ClusterCart engine and Edge Function; React app with all routes.</td></tr>
+    <tr><td>3. Rebrand</td><td>Renamed everywhere to SEED X with tagline, credits and team.</td></tr>
+    <tr><td>4. Visual upgrade</td><td>Low-poly 3D look rejected; replaced by photoreal cinematic hero with Canvas rain/dust weather; Three.js only for ClusterCart data. Spline dropped (no connector).</td></tr>
+    <tr><td>5. Hardening</td><td>"Demo must be functional, database safe, security high": E2E journey, concurrency race test, security probes, CSP.</td></tr>
+    <tr><td>6. One-Shot directive</td><td>46-crop catalogue, 10 languages, My Clients/Suppliers, notification centre, marketplace filters, command centres, 141 database tests, accessibility fixes, full docs, clean ZIPs.</td></tr>
+    <tr><td>7. Go live</td><td>GitHub repo <code>seedx</code> created and pushed; Cloudflare Workers build fixed twice (redirect loop, build env); live site verified.</td></tr>
+  </table>
+</div>
+
+<!-- 11 DECK OUTLINE -->
+<div class="section">
+  <div class="eyebrow">11 · For the presentation</div>
+  <h2>Suggested deck (12 slides)</h2>
+  <table>
+    <tr><th style="width:6%">#</th><th style="width:26%">Slide</th><th>Talking points</th></tr>
+    <tr><td>1</td><td>Title</td><td>SEED X · Better Farming Starts with Better Connections · From Farm to Future · Tejash Shastri &amp; Shaurya.</td></tr>
+    <tr><td>2</td><td>The problem</td><td>Middlemen, hidden costs, small expensive loads, scattered and unverified information, language barriers.</td></tr>
+    <tr><td>3</td><td>Meet Dhruv</td><td>A farmer persona: lists his wheat in two minutes in Hindi.</td></tr>
+    <tr><td>4</td><td>Four pillars</td><td>Direct market access · NetBack · ClusterCart · Kisan services.</td></tr>
+    <tr><td>5</td><td>NetBack</td><td>Farmer net vs buyer landed cost, shown separately and honestly.</td></tr>
+    <tr><td>6</td><td>ClusterCart</td><td>Pools nearby harvests only if ≥5% cheaper; explains every yes and no; each farmer accepts their own offer.</td></tr>
+    <tr><td>7</td><td>Relationships &amp; dashboards</td><td>My Clients / My Suppliers stages; command centres per role; real-time notifications.</td></tr>
+    <tr><td>8</td><td>Built for Bharat</td><td>Ten languages in native scripts, works without 3D, mobile-first, 46 crops.</td></tr>
+    <tr><td>9</td><td>Trust &amp; security</td><td>Row-level security on every table, MFA admins, no overselling, private addresses, 227 passing tests.</td></tr>
+    <tr><td>10</td><td>Technology</td><td>React + Supabase (Postgres, Auth, Storage, Realtime, Edge Functions) + Cloudflare; architecture diagram from section 04.</td></tr>
+    <tr><td>11</td><td>Live demo</td><td>seedxsss.tejash-shastri-rx.workers.dev: marketplace, demo farmer dashboard, language switch.</td></tr>
+    <tr><td>12</td><td>Roadmap</td><td>Live mandi data, payments, SMS alerts, own email, native-reviewed translations, custom domain, pilot with real farmers.</td></tr>
+  </table>
+  <h3>Glossary</h3>
+  <p class="small"><b>NetBack</b>: what the farmer keeps after seller-paid costs. <b>Landed cost</b>: what the buyer pays including buyer-paid costs. <b>ClusterCart</b>: SEED X's pooled-pickup matching engine. <b>Mandi</b>: regulated agricultural market. <b>MSP</b>: Minimum Support Price announced by government. <b>RLS</b>: row-level security, database rules deciding who sees each row. <b>MFA/TOTP</b>: two-factor login with an authenticator app. <b>Paise</b>: 1/100 rupee; all money stored in paise. <b>Quintal</b>: 100 kg.</p>
+</div>
+
+</body>
+</html>
