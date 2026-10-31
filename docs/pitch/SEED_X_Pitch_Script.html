@@ -30,6 +30,8 @@ ul { margin:0 0 2mm; padding-left:5mm; } li { margin-bottom:1mm; }
 .slide .hd b { font-size:11.2pt; } .slide .hd span { font-size:9pt; color:var(--gold); font-weight:700; white-space:nowrap; }
 .slide .bd { padding:3mm 4mm 1.5mm; }
 .say { font-size:11.2pt; line-height:1.55; margin:0 0 2.2mm; }
+.scr { font-size:9.2pt; background:#eef3f8; border-radius:1.5mm; padding:1.2mm 2.5mm; margin:0 0 2.2mm; color:#24364a; }
+.scr::before { content:"ON SCREEN  "; font-weight:800; font-size:7.6pt; letter-spacing:.08em; color:#2c4386; }
 .do { font-size:9.4pt; color:var(--muted); margin:0 0 2mm; font-style:italic; }
 .do::before { content:"▸ "; font-style:normal; color:var(--forest); }
 .punch { background:var(--cream); border-radius:2mm; padding:2mm 3mm; font-weight:800; color:var(--forest); margin:0 0 2.2mm; font-size:11.2pt; }
@@ -69,6 +71,7 @@ th { background:var(--forest); color:#fff; } tr { break-inside:avoid; }
   <h2><span class="who T">TEJASH</span> Act 1: the problem (slides 1–3)</h2>
 
   <div class="slide"><div class="hd"><b>Slide 1 · The hook</b><span>≈ 30 s</span></div><div class="bd">
+    <p class="scr">Cinematic farm photo · headline "A farmer’s harvest should not lose value…" · SEED X · QR code</p>
     <p class="do">Walk to the centre. Wait 3 seconds. Smile. Ask the judges directly.</p>
     <p class="say">Quick question. The last time you bought tomatoes, say ₹40 a kilo, how much of that ₹40 do you think reached the farmer who grew them?</p>
     <p class="do">Pause. Let them think.</p>
@@ -77,6 +80,7 @@ th { background:var(--forest); color:#fff; } tr { break-inside:avoid; }
   </div></div>
 
   <div class="slide"><div class="hd"><b>Slide 2 · The value gap</b><span>≈ 35 s</span></div><div class="bd">
+    <p class="scr">Big 33% / 36% / 37% boxes (tomato, onion, potato) · chain Farmer → Traders → Transport &amp; storage → Retailer → Consumer</p>
     <p class="say">Here's the answer to my question. The Reserve Bank of India studied it. For tomatoes, the farmer gets about <b>33 paise</b> of every rupee you pay. Onions, about 36. Potatoes, about 37.</p>
     <p class="punch">"So of your ₹40, Dhruv may see only around ₹13. The rest disappears on the way."</p>
     <p class="say">It passes through traders, transport, storage and the shop. Every hand-off takes a cut. So the farmer earns less, and you pay more. That's exactly this hackathon's challenge.</p>
@@ -84,6 +88,7 @@ th { background:var(--forest); color:#fff; } tr { break-inside:avoid; }
   </div></div>
 
   <div class="slide"><div class="hd"><b>Slide 3 · The real reason</b><span>≈ 30 s</span></div><div class="bd">
+    <p class="scr">Four cards: few buyers, small lots, fragmented pickups, perishables · dark panel with Farm A/B/C and broken links</p>
     <p class="say">Why does this keep happening? Not because farmers are bad at selling. It's because nobody <b>connects the dots</b>.</p>
     <p class="say">Dhruv can't see the buyers. The hostel kitchen in Bhopal that needs tomatoes every week can't find small farmers like him. Three farms in the same village send three half-empty trips. And tomatoes don't wait. Every day they sit, they lose money.</p>
     <p class="punch">"Middlemen win because they connect people. So we asked: what if Dhruv's phone could do the connecting, and Dhruv kept the value?"</p>
@@ -94,6 +99,7 @@ th { background:var(--forest); color:#fff; } tr { break-inside:avoid; }
   <h2><span class="who T">TEJASH</span> Act 2: the solution (slides 4–6)</h2>
 
   <div class="slide"><div class="hd"><b>Slide 4 · One simple flow</b><span>≈ 40 s</span></div><div class="bd">
+    <p class="scr">Six numbered steps (list → requirements → checks → ClusterCart → NetBack → tracking) · supporting-service chips · "Software-only" badge · challenge photo</p>
     <p class="say">That's SEED X. Let me show you Dhruv's day with it.</p>
     <p class="say">In the morning, Dhruv opens SEED X on his phone, in Hindi, and lists 900 kilos of tomatoes in under two minutes: crop, grade, price, photos. He even sets a <b>minimum price</b>, so nobody can offer him less.</p>
     <p class="say">His exact farm location stays <b>private</b>. Buyers only see his area until a deal is done.</p>
@@ -103,6 +109,7 @@ th { background:var(--forest); color:#fff; } tr { break-inside:avoid; }
   </div></div>
 
   <div class="slide"><div class="hd"><b>Slide 5 · ClusterCart: the smart truck</b><span>≈ 45 s</span></div><div class="bd">
+    <p class="scr">Left: 3 farms → engine → 3 buyers (illustrative) · right: live ClusterCart screenshot · green box "pooling would cost 18.7% more"</p>
     <p class="say">Now Dhruv's biggest problem: transport. His 80 kilos alone don't fill a truck. Neither do his neighbours' 60 and 100.</p>
     <p class="say">ClusterCart looks at all the nearby farms and all the buyers, and asks: is it cheaper to send one shared truck, or separate trips? It checks the crop, quality, quantity, distance, freshness and timing, like a very honest transport manager.</p>
     <p class="say">And here's our favourite part. We ran it on our live app, and it said <b>no</b>.</p>
@@ -113,6 +120,7 @@ th { background:var(--forest); color:#fff; } tr { break-inside:avoid; }
   </div></div>
 
   <div class="slide"><div class="hd"><b>Slide 6 · NetBack: the real money</b><span>≈ 35 s</span></div><div class="bd">
+    <p class="scr">Waterfall ₹2,500 − ₹200 − ₹50 = ₹2,250 · buyer landed-cost card · live NetBack screenshot</p>
     <p class="say">Second question every farmer asks: "How much will I <i>really</i> take home?"</p>
     <p class="say">Say Dhruv gets an offer of ₹2,500. Sounds good. But if he pays ₹200 for transport and ₹50 for packing, he actually keeps <b>₹2,250</b>.</p>
     <p class="punch">"A higher offer isn't always a better deal. NetBack shows Dhruv his real money before he says yes."</p>
@@ -125,6 +133,7 @@ th { background:var(--forest); color:#fff; } tr { break-inside:avoid; }
   <h2><span class="who T">TEJASH</span> Act 3: more than a marketplace (slides 7–8)</h2>
 
   <div class="slide"><div class="hd"><b>Slide 7 · Dhruv's business on his phone</b><span>≈ 35 s</span></div><div class="bd">
+    <p class="scr">Live Farmer Command Centre screenshot · four boxes: Manage, Grow relationships, Complete trade, Find support</p>
     <p class="say">Once Dhruv accepts, the tomatoes are <b>reserved instantly</b>, so nobody else can buy the same crates. A transport partner is assigned, and both sides can <b>track the order</b>: pickup, on the way, delivered, done.</p>
     <p class="say">And here's what turns one sale into a business. SEED X remembers the hostel. In Dhruv's <b>My Clients</b>, it moves from "enquiry" to "active" to "repeat client". He can star his best buyers and keep private notes like "pays on time". The hostel has the same for its farmers in <b>My Suppliers</b>.</p>
     <p class="say">Every morning Dhruv's <b>dashboard</b> tells him what matters: open listings, offers waiting, orders on the way, money from completed sales.</p>
@@ -134,6 +143,7 @@ th { background:var(--forest); color:#fff; } tr { break-inside:avoid; }
   </div></div>
 
   <div class="slide"><div class="hd"><b>Slide 8 · Made for every farmer</b><span>≈ 35 s</span></div><div class="bd">
+    <p class="scr">Ten language chips in native scripts · accessibility points · Bengali and Tamil phone screenshots</p>
     <p class="say">But none of this matters if Dhruv can't use it. So SEED X speaks <b>ten Indian languages</b> in their own scripts: Hindi, Bengali, Telugu, Marathi, Tamil, Gujarati, Kannada, Malayalam, Punjabi and English. Even the crop names are translated.</p>
     <p class="do">Optional, in Hindi with a smile: "Kisan apni bhasha mein, apne phone par, apna sahi daam dekh sakta hai."</p>
     <p class="say">Big buttons. Short steps. Clear kilos and quintals. It works on an ordinary smartphone, even on slow internet. And our onboarding guide is a friendly farmer character called Dhruv, the same Dhruv from our story.</p>
@@ -148,6 +158,7 @@ th { background:var(--forest); color:#fff; } tr { break-inside:avoid; }
   <h2><span class="who S">SHAURYA</span> Act 4: trust (slides 9–10)</h2>
 
   <div class="slide"><div class="hd"><b>Slide 9 · Can I trust it?</b><span>≈ 40 s</span></div><div class="bd">
+    <p class="scr">Six security cards · dark "Proof, not a shield icon" panel with test results</p>
     <p class="say">Thanks, Tejash. That's the third question every farmer asks: "Can I trust this?"</p>
     <p class="say">Think of SEED X like a bank. Every user's private data is in their own <b>locker</b>. Dhruv can't open the hostel's locker, and the hostel can't open his. His exact farm address only unlocks for the buyer and the driver once there's a real order.</p>
     <p class="say">Only <b>verified</b> people can trade: you must confirm your email first. And our admins need a second security code on their phone before they can do anything sensitive.</p>
@@ -157,6 +168,7 @@ th { background:var(--forest); color:#fff; } tr { break-inside:avoid; }
   </div></div>
 
   <div class="slide"><div class="hd"><b>Slide 10 · Why SEED X is different</b><span>≈ 30 s</span></div><div class="bd">
+    <p class="scr">e-NAM / AGMARKNET box → "Where SEED X focuses" · four tech boxes (Frontend, Backend, Hosting, Visuals)</p>
     <p class="say">We're also honest about what already exists. India has <b>e-NAM</b> for online mandi trading, and <b>AGMARKNET</b> for daily mandi prices. They're great, and we're not replacing them.</p>
     <p class="say">But they work at the mandi level. SEED X works at <b>Dhruv's</b> level: his crops, his nearby buyers, his shared trucks, his real money and his regular customers, every single day. And it can use those public prices as a reference.</p>
     <p class="punch">"They built the highway. We're building the road from Dhruv's farm to it."</p>
@@ -167,6 +179,7 @@ th { background:var(--forest); color:#fff; } tr { break-inside:avoid; }
 <div class="page">
   <h2><span class="who B">BOTH</span> Act 5: proof and the ask (slide 11)</h2>
   <div class="slide"><div class="hd"><b>Live demo: Shaurya clicks, Tejash tells the story</b><span>≈ 55 s</span></div><div class="bd">
+    <p class="scr">Slide 11 stays up while you switch to the browser: demo steps, QR code, live link</p>
     <table>
       <tr><th style="width:40%">Shaurya does</th><th>Tejash says</th></tr>
       <tr><td>Opens the live site (home page with rain effect)</td><td>"This is SEED X, live. Notice the weather on the farm: we wanted it to feel like a farmer's world, not a bank form."</td></tr>
@@ -180,6 +193,7 @@ th { background:var(--forest); color:#fff; } tr { break-inside:avoid; }
   </div></div>
 
   <div class="slide"><div class="hd"><b>The business, and the close</b><span>≈ 30 s</span></div><div class="bd">
+    <p class="scr">Slide 11 again: pilot metrics + gold "Proposed business model" box + closing line</p>
     <p class="say"><span class="who S">SHAURYA</span> How does SEED X sustain itself? <b>Farmers list for free.</b> Always. Buyers pay a small fee only when an order is completed, and big buyers like hostels and canteens can pay for ClusterCart planning. We'll start small: one district, one crop, one farmer group. And we'll measure what matters: more money in the farmer's hand per kilo, lower cost for buyers, and how many buyers come back.</p>
     <p class="say"><span class="who T">TEJASH</span> Remember my question: how much of your ₹40 reached the farmer? Today, maybe ₹13.</p>
     <p class="punch">"Dhruv doesn't need sympathy. He needs to see his buyers, his costs and his real price. SEED X helps shorten the distance between a farmer's harvest and a fairer market. Thank you."</p>
