@@ -1,0 +1,17 @@
+{
+  "name": "SEED X - Better Farming Starts with Better Connections",
+  "short_name": "SEED X",
+  "description": "Farmer-first agricultural commerce: harvest listings, buyer demand, ClusterCart pooling, NetBack pricing, seeds, mandi prices and official schemes.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F5F0E4",
+  "theme_color": "#174B35",
+  "lang": "en-IN",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "/assets/brand/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/assets/brand/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/assets/brand/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

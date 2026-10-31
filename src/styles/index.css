@@ -1,0 +1,92 @@
+@import '@fontsource-variable/manrope';
+@import '@fontsource/noto-sans-devanagari/400.css';
+@import '@fontsource/noto-sans-devanagari/600.css';
+@import '@fontsource/noto-sans-devanagari/700.css';
+@import 'tailwindcss';
+
+/* SEED X design tokens - forest green / warm cream / harvest gold (brand brief). */
+@theme {
+  --font-sans: 'Manrope Variable', 'Noto Sans Devanagari', system-ui, sans-serif;
+  --font-display: 'Manrope Variable', 'Noto Sans Devanagari', system-ui, sans-serif;
+
+  --color-forest-50: #eef5f0;
+  --color-forest-100: #e6f1e7;
+  --color-forest-200: #c4dccb;
+  --color-forest-300: #8fbb9d;
+  --color-forest-400: #4f8d66;
+  --color-forest-500: #2a6a48;
+  --color-forest-600: #1f5a3d;
+  --color-forest-700: #174b35;
+  --color-forest-800: #113a29;
+  --color-forest-900: #0b281c;
+
+  --color-gold-100: #fbf0d8;
+  --color-gold-200: #f5ddaa;
+  --color-gold-300: #eec476;
+  --color-gold-400: #e5a63b;
+  --color-gold-500: #cf8d22;
+  --color-gold-600: #a86d16;
+
+  --color-cream-50: #fbf8f1;
+  --color-cream-100: #f5f0e4;
+  --color-cream-200: #ebe2cd;
+
+  --color-charcoal-900: #1c2420;
+  --color-charcoal-700: #3a4540;
+  --color-charcoal-500: #5d6964;
+
+  --color-danger-600: #b42318;
+  --color-danger-50: #fdecea;
+  --color-warn-700: #8a5a00;
+  --color-warn-50: #fff6e0;
+  --color-info-700: #1d4f7a;
+  --color-info-50: #e9f2fa;
+
+  --radius-card: 1.25rem;
+  --shadow-card: 0 1px 2px rgb(17 58 41 / 0.06), 0 8px 24px -12px rgb(17 58 41 / 0.18);
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    @apply bg-cream-100 text-charcoal-900 font-sans antialiased;
+    font-feature-settings: 'tnum' 0;
+  }
+  :lang(hi) body, [lang='hi'] { line-height: 1.7; }
+  h1, h2, h3 { @apply font-display text-forest-800 tracking-tight; text-wrap: balance; }
+  a { @apply text-forest-700 underline-offset-4; }
+  :focus-visible { outline: 3px solid var(--color-gold-400); outline-offset: 2px; border-radius: 6px; }
+  .tabular { font-variant-numeric: tabular-nums; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+  }
+}
+
+/* Hero motion (disabled automatically by the reduced-motion rule above). */
+@keyframes seedx-flow { to { stroke-dashoffset: -48; } }
+@keyframes seedx-truck { 0% { transform: translateX(-60px); opacity: 0 } 12% { opacity: 1 } 88% { opacity: 1 } 100% { transform: translateX(120px); opacity: 0 } }
+@keyframes seedx-sun { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+@keyframes seedx-sway { 0%, 100% { transform: skewX(0deg); } 50% { transform: skewX(-2.5deg); } }
+@keyframes seedx-node { 0%, 100% { transform: scale(1); opacity: .25 } 50% { transform: scale(1.7); opacity: .05 } }
+.seedx-flow { animation: seedx-flow 2.4s linear infinite; }
+.seedx-truck { animation: seedx-truck 9s ease-in-out infinite; }
+.seedx-sun { transform-origin: 880px 300px; transform-box: view-box; animation: seedx-sun 7s ease-in-out infinite; }
+.seedx-sway { transform-origin: 50% 100%; transform-box: fill-box; animation: seedx-sway 5s ease-in-out infinite; }
+.seedx-sway-2 { animation-duration: 6.5s; animation-delay: -2s; }
+.seedx-node { transform-box: fill-box; transform-origin: center; animation: seedx-node 2.8s ease-in-out infinite; }
+
+@layer components {
+  a.card { transition: transform .25s var(--ease-out-soft), box-shadow .25s var(--ease-out-soft), border-color .2s; }
+  a.card:hover { transform: translateY(-3px); box-shadow: 0 2px 4px rgb(17 58 41 / .06), 0 18px 36px -16px rgb(17 58 41 / .28); }
+  .card { @apply bg-white rounded-[var(--radius-card)] shadow-[var(--shadow-card)] border border-forest-100; }
+  .field-label { @apply block text-sm font-semibold text-charcoal-700 mb-1.5; }
+  .field-input {
+    @apply w-full min-h-12 rounded-xl border border-forest-200 bg-white px-3.5 text-base text-charcoal-900 placeholder:text-charcoal-500/70
+      focus:border-forest-500 focus:outline-none focus:ring-4 focus:ring-forest-100 disabled:bg-cream-50 disabled:text-charcoal-500;
+  }
+  .field-input[aria-invalid='true'] { @apply border-danger-600 ring-danger-50; }
+  .field-hint { @apply mt-1 text-sm text-charcoal-500; }
+  .field-error { @apply mt-1 text-sm font-semibold text-danger-600; }
+  .eyebrow { @apply text-xs font-bold uppercase tracking-[0.16em] text-gold-600; }
+}

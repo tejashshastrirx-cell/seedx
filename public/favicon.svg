@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="SEED X">
+  <rect width="64" height="64" rx="16" fill="#174B35"/>
+  <path d="M15 15 L49 49 M49 15 L15 49" stroke="#E5A63B" stroke-width="4.5" stroke-linecap="round"/>
+  <g fill="#F5F0E4" stroke="#E5A63B" stroke-width="2.5">
+    <circle cx="15" cy="15" r="4.5"/><circle cx="49" cy="15" r="4.5"/><circle cx="15" cy="49" r="4.5"/><circle cx="49" cy="49" r="4.5"/>
+  </g>
+  <path d="M32 17 C40.5 25 43 31.5 43 37.5 A11 11 0 0 1 21 37.5 C21 31.5 23.5 25 32 17 Z" fill="#F5F0E4" stroke="#174B35" stroke-width="2"/>
+  <path d="M32 45 V31" stroke="#174B35" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M32 37.5 C27.6 37.5 25 34.8 25 31 C29.2 31 32 33.6 32 37.5 Z M32 34 C32 29.8 34.8 27 39 27 C39 31 36.2 34 32 34 Z" fill="#2A6A48"/>
+</svg>
