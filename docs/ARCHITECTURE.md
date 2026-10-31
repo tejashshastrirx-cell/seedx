@@ -7,7 +7,7 @@ Browser (Vite + React + TS)  --publishable key + user JWT-->  Supabase
   - Hero: photoreal artwork + Canvas 2D weather                  - Storage: harvest-images (public, owner-path), private-user-documents
   - Three.js/R3F only for ClusterCart data visualisation         - Realtime: notifications (RLS-filtered)
                                                                  - Edge Function: run-clustercart (server engine, persisted runs)
-Cloudflare Pages (static dist/, _headers CSP, _redirects SPA)
+Cloudflare Workers static assets (dist/, _headers CSP, SPA via wrangler.jsonc)
 ```
 
 **Source of truth** is Postgres. The browser never sets owner ids, prices, totals or inventory directly; it calls RPCs that validate and record events.

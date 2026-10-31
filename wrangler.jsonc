@@ -1,0 +1,13 @@
+{
+  // Cloudflare Workers static-assets deployment for SEED X (Workers Builds runs `npx wrangler deploy`).
+  // SPA routing is handled by not_found_handling, so no _redirects file is needed.
+  // Security headers come from public/_headers.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "seedxkf",
+  "compatibility_date": "2026-10-23",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  },
+  "observability": { "enabled": true }
+}

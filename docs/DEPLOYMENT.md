@@ -10,7 +10,7 @@ Edge Function: `npx supabase functions deploy run-clustercart --project-ref jssv
 
 1. Push the repo to GitHub (private). 2. Pages → Create project → connect repo. 3. Build `npm run build`, output `dist`, Node 22.
 4. Env vars (Production + Preview): `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY` only.
-5. `public/_headers` (CSP/security headers) and `public/_redirects` (SPA fallback) ship automatically.
+5. `public/_headers` (CSP/security headers) ships automatically. SPA routing: `wrangler.jsonc` (`not_found_handling: single-page-application`) for Workers; Pages treats a project without `404.html` as an SPA. Do not add `_redirects` - Workers rejects `/* /index.html 200` as an infinite loop.
 6. Supabase Auth → URL configuration: Site URL = production domain; redirect `https://your-domain/auth/callback` (+ preview domain).
 
 ## Verify after deploy
