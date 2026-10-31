@@ -85,7 +85,7 @@ const en = {
     unverifiedBanner: 'Your email is not verified yet. Offers, listings and orders are locked until you verify.',
     forgotTitle: 'Reset your password', forgotLead: 'We will email you a secure reset link.', sendReset: 'Send reset link',
     resetSent: 'If an account exists for that email, a reset link has been sent.', resetTitle: 'Choose a new password', resetCta: 'Update password',
-    resetDone: 'Password updated.', callbackWorking: 'Completing sign-in…', callbackFailed: 'This link is invalid or has expired. Request a new one.',
+    resetDone: 'Password updated.', callbackWorking: 'Completing sign-in…', callbackFailed: 'We could not finish signing you in from this link. If you just verified your email, it is already confirmed - log in with your email and password. Otherwise request a new link.',
     mfaTitle: 'Two-factor verification', mfaLead: 'Enter the 6-digit code from your authenticator app.', mfaCode: 'Authentication code', mfaVerify: 'Verify',
   },
   onboarding: {
