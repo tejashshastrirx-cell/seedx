@@ -1,6 +1,6 @@
 // Per-device conveniences only (never security-relevant).
 const KEY = 'seedx.prefs.v1'
-export type Prefs = { disable3d: boolean; lang?: 'en' | 'hi' }
+export type Prefs = { disable3d: boolean; lang?: 'en' | 'hi'; weather?: 'auto' | 'clear' | 'dust' | 'rain' }
 export function readPrefs(): Prefs {
   try { return { disable3d: false, ...JSON.parse(localStorage.getItem(KEY) ?? '{}') } } catch { return { disable3d: false } }
 }

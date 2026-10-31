@@ -1,0 +1,36 @@
+name: CI
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npx tsc -b
+      - run: npm test
+      - run: npm run build
+        env: { VITE_SUPABASE_URL: https://example.supabase.co, VITE_SUPABASE_PUBLISHABLE_KEY: ci-placeholder }
+      - name: No secrets in bundle
+        run: "! grep -rEl 'service_role|sb_secret_|SUPABASE_SERVICE_ROLE' dist"
+  database:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env: { POSTGRES_HOST_AUTH_METHOD: trust }
+        ports: ['54329:5432']
+        options: --health-cmd pg_isready --health-interval 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y postgresql-client postgresql-16-pgtap || true
+      - run: LOCAL_PGHOST=localhost E2E_DEMO_PASSWORD=ci-only-password ./scripts/db-local.sh --test
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: gitleaks/gitleaks-action@v2
+        env: { GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}' }

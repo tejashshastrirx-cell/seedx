@@ -44,7 +44,7 @@ begin
     min_price_paise_per_unit, asking_price_paise_per_unit, seller_handling_paise_per_unit, harvest_date, available_from, available_until,
     state, district, locality, approx_lat, approx_lng, status, is_demo)
   select x.id, x.farmer, c.id, (select v.id from public.crop_varieties v where v.commodity_id = c.id and v.name_en = x.variety),
-         x.title, x.grade, x.notes, x.unit, x.qty, x.min_p, x.ask_p, x.handling, current_date - 10, current_date, current_date + x.days,
+         x.title, x.grade, x.notes, x.unit, x.qty, x.min_p, x.ask_p, x.handling, current_date - (case when x.code = 'tomato' then 1 else 10 end), current_date, current_date + x.days,
          'Madhya Pradesh', x.district, x.locality, x.lat, x.lng, 'published', true
     from (values
       ('a0000000-0000-4000-8000-000000000001'::uuid, 'd0000000-0000-4000-8000-000000000001'::uuid, 'wheat', 'Sharbati', 'Sharbati wheat, cleaned and bagged', 'A', 'Moisture under 12%, 50 kg bags', 'quintal', 30.0, 260000::bigint, 285000::bigint, 2000::bigint, 30, 'Sehore', 'Ashta road', 23.20, 77.08),

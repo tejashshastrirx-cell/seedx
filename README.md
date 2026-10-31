@@ -36,15 +36,16 @@ Never put a service-role/secret key, DB password or SMTP password in a `VITE_` v
 | --- | --- |
 | `npm run dev` / `build` / `preview` | Vite dev server, production build, preview the build |
 | `npm run typecheck` | TypeScript project check |
-| `npm test` | Vitest unit tests (ClusterCart engine, NetBack, unit conversion, money) |
+| `npm test` | Vitest unit tests (ClusterCart engine, NetBack, unit conversion, money, weather modes) |
+| `npx playwright test` | Live E2E: full UI journey, oversell race + idempotent replay, security probes |
 | `npm run db:test` | Rebuilds a throwaway local Postgres from `supabase/migrations` and runs the pgTAP security suite (needs a local PostgreSQL 16+ with pgTAP on port 54329; see `scripts/db-local.sh`) |
 
 With Docker available you can instead use the Supabase CLI: `npx supabase start`, `npx supabase db reset`, `npx supabase test db`.
 
 ## Backend (Supabase project `jssvwvhqlmijxujquksw`, region ap-south-1)
-- Migrations: `supabase/migrations/` (identity & roles, marketplace & atomic offer acceptance, ClusterCart/seeds/prices/schemes/storage, reference data, brand migration). Already applied to the dev project.
+- Migrations: `supabase/migrations/` (identity & roles, marketplace & atomic offer acceptance, ClusterCart/seeds/prices/schemes/storage, reference data, brand migration, FK indexes). All applied to the dev project.
 - Demo data: `supabase/seed.sql` (synthetic, `@seedx.example` accounts, labelled "Demo"/"SAMPLE").
-- Edge Function: `supabase/functions/run-clustercart` (written, not yet deployed - deploy with `npx supabase functions deploy run-clustercart --project-ref jssvwvhqlmijxujquksw`). Until deployed, the ClusterCart page shows a clearly labelled local preview that cannot send offers.
+- Edge Function: `supabase/functions/run-clustercart` - deployed and E2E-tested (server-side engine, persisted runs, send offers).
 - Security: RLS on every table, column-level grants, role grants only via trusted RPCs, admin actions require MFA (AAL2), idempotent atomic stock reservation. `supabase/tests/database/` - 68 pgTAP assertions.
 
 ## Demo accounts (synthetic)
@@ -59,5 +60,10 @@ With Docker available you can instead use the Supabase CLI: `npx supabase start`
 4. data.gov.in API key for live mandi prices (currently clearly labelled SAMPLE rows).
 5. Create a GitHub repo and a Cloudflare Pages project (build `npm run build`, output `dist`).
 
-## Status / work in progress
-- `src/scenes/world/` contains a new cinematic React Three Fiber farm-to-market world (`World.tsx`, `StoryCanvas.tsx`) that typechecks but is **not yet wired into the homepage** - the current hero uses `FarmHero3D.tsx`.
+## Docs
+`ARCHITECTURE.md` · `SECURITY.md` · `DEPLOYMENT.md` · `PRODUCT_SPEC.md` · `CLAUDE.md`
+
+## Homepage visuals
+Approved photoreal hero (`public/assets/seedx/`, responsive WebP/JPEG + mobile focal crops) with a Canvas 2D weather layer
+(Auto/Clear/Dust/Rain - visual ambience only; Auto uses a documented default because no weather service is connected).
+Three.js is used only for the data-driven ClusterCart table.

@@ -48,7 +48,7 @@
 }
 
 @layer base {
-  html { -webkit-text-size-adjust: 100%; }
+  html { -webkit-text-size-adjust: 100%; overflow-x: clip; }
   body {
     @apply bg-cream-100 text-charcoal-900 font-sans antialiased;
     font-feature-settings: 'tnum' 0;
@@ -62,6 +62,12 @@
     *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
   }
 }
+
+@keyframes seedx-pushin { from { transform: scale(1.03) } to { transform: scale(1.1) translate3d(-1%, -1%, 0) } }
+@keyframes seedx-mist { from { transform: translate3d(-6%, 0, 0) } to { transform: translate3d(8%, -6%, 0) } }
+.header-over-hero { background: linear-gradient(180deg, rgb(8 32 22 / .55), transparent) !important; border-color: transparent !important; backdrop-filter: none !important; }
+.header-over-hero nav a, .header-over-hero > div > div a, .header-over-hero > div > div button { color: #F5F0E4; }
+.header-over-hero nav a[aria-current='page'] { background: rgb(255 255 255 / .12); }
 
 /* Hero motion (disabled automatically by the reduced-motion rule above). */
 @keyframes seedx-flow { to { stroke-dashoffset: -48; } }

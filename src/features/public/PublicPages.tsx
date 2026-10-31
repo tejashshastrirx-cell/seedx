@@ -7,7 +7,9 @@ import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/app/auth'
 import { friendlyError } from '@/lib/errors'
 import { Button, Card, LinkButton, Notice, PageHeader, SelectField, TextAreaField, TextField } from '@/components/ui'
-import { HeroScene } from '@/scenes/HeroScene'
+import { HeroSection } from '@/features/hero/HeroSection'
+import { TrustSources } from './TrustSources'
+import { ClusterShowcase } from './ClusterShowcase'
 import { CountUp, Reveal, Stagger, StaggerItem } from '@/components/motion'
 import { motion } from 'motion/react'
 import { SplineScene } from '@/scenes/SplineScene'
@@ -39,8 +41,6 @@ function Monogram({ initials, tone }: { initials: string; tone: 'forest' | 'gold
   )
 }
 
-const heroItem = { hidden: { opacity: 0, y: 22 }, show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const } } }
-
 export function HomePage() {
   const { t } = useTranslation()
   const { user } = useAuth()
@@ -63,24 +63,7 @@ export function HomePage() {
   ]
   return (
     <div className="-mt-8">
-      <section className="relative -mx-4 overflow-hidden sm:mx-0 sm:mt-6 sm:rounded-[2rem]">
-        <div className="absolute inset-0">
-          <HeroScene />
-        </div>
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-cream-100 via-cream-100/85 to-transparent sm:via-cream-100/70 lg:via-cream-100/60 lg:to-transparent" />
-        <motion.div className="pointer-events-none relative max-w-2xl px-5 py-16 sm:px-10 sm:py-24 [&_a]:pointer-events-auto" initial="hidden" animate="show" variants={{ hidden: {}, show: { transition: { staggerChildren: 0.09, delayChildren: 0.1 } } }}>
-          <motion.div variants={heroItem}><p className="eyebrow mb-3">{t('home.eyebrow')}</p></motion.div>
-          <motion.div variants={heroItem}><h1 className="text-4xl font-extrabold leading-[1.08] sm:text-6xl">{t('home.title')}</h1></motion.div>
-          <motion.div variants={heroItem}><p className="mt-3 text-lg font-bold text-gold-600">{t('brand.supporting')}</p></motion.div>
-          <motion.div variants={heroItem}><p className="mt-4 max-w-xl text-lg text-charcoal-700">{t('home.lead')}</p></motion.div>
-          <motion.div variants={heroItem} className="mt-8 flex flex-wrap gap-3">
-            <LinkButton to={user ? '/farmer/harvest' : '/signup'} size="lg"><Sprout aria-hidden className="size-5" />{t('home.ctaFarmer')}</LinkButton>
-            <LinkButton to={user ? '/buyer/requirements' : '/signup'} size="lg" variant="gold"><ShoppingBasket aria-hidden className="size-5" />{t('home.ctaBuyer')}</LinkButton>
-            <LinkButton to="/marketplace" size="lg" variant="secondary">{t('home.ctaExplore')}<ArrowRight aria-hidden className="size-5" /></LinkButton>
-          </motion.div>
-          <motion.div variants={heroItem}><p className="mt-6 text-sm text-charcoal-700">{t('home.honest')}</p></motion.div>
-        </motion.div>
-      </section>
+      <HeroSection />
 
       <section className="mt-10 grid gap-4 sm:grid-cols-3" aria-labelledby="live">
         <h2 id="live" className="sr-only">{t('home.liveTitle')}</h2>
@@ -96,6 +79,8 @@ export function HomePage() {
         <p className="text-xs text-charcoal-500 sm:col-span-3">{t('home.liveNote')}</p>
       </section>
 
+      <ClusterShowcase />
+
       <section className="mt-14" aria-labelledby="pillars">
         <Reveal><h2 id="pillars" className="text-3xl font-extrabold">{t('home.pillarsTitle')}</h2></Reveal>
         <Stagger className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -109,7 +94,7 @@ export function HomePage() {
         </Stagger>
       </section>
 
-      <section className="mt-14 grid items-center gap-8 lg:grid-cols-[1.3fr_1fr]" aria-labelledby="story">
+      <section id="journey" className="mt-14 grid scroll-mt-24 items-center gap-8 lg:grid-cols-[1.3fr_1fr]" aria-labelledby="story">
         <div>
           <p className="eyebrow">{t('brand.supporting')}</p>
           <h2 id="story" className="mt-2 text-3xl font-extrabold">{t('home.storyTitle')}</h2>
@@ -131,6 +116,7 @@ export function HomePage() {
           <p className="text-xs text-charcoal-500">{t('about.dhruvRole')}</p>
         </Card></Reveal>
       </section>
+      <TrustSources />
     </div>
   )
 }

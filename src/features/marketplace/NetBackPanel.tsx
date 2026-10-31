@@ -4,6 +4,7 @@ import { computeNetBack, convertPricePerUnit, type CostLine, type Unit } from '@
 import { supabase } from '@/lib/supabase'
 import { date, rupees, unitShort } from '@/lib/format'
 import { Badge } from '@/components/ui'
+import { NetBackChart } from '@/components/NetBackChart'
 
 /** Latest dated mandi modal price for a commodity (benchmark only, never an offer). */
 export function useMandiBenchmark(commodityId: number | null | undefined, state?: string | null) {
@@ -36,7 +37,9 @@ export function NetBackPanel({ quantity, unit, pricePaisePerUnit, lines, commodi
   )
   return (
     <section className="rounded-2xl border border-forest-200 bg-forest-50/60 p-4" aria-label={t('netback.title')}>
-      <h3 className="mb-1 text-base font-extrabold">{t('netback.title')}</h3>
+      <h3 className="mb-3 text-base font-extrabold">{t('netback.title')}</h3>
+      <NetBackChart quantity={quantity} pricePaisePerUnit={pricePaisePerUnit} lines={lines} unitLabel={unitShort(unit)} />
+      <details className="mt-3"><summary className="cursor-pointer text-sm font-bold text-forest-700">{t('common.view')}</summary>
       <div className="grid gap-x-8 sm:grid-cols-2">
         <div>
           {row(t('netback.gross'), rupees(nb.grossPaise))}
@@ -49,6 +52,7 @@ export function NetBackPanel({ quantity, unit, pricePaisePerUnit, lines, commodi
           {row(t('netback.landed'), rupees(nb.buyerLandedTotalPaise), true, `${rupees(nb.buyerLandedPerUnitPaise)} ${t('netback.perUnit', { unit: unitShort(unit) })}`)}
         </div>
       </div>
+      </details>
       {!compact && <p className="mt-2 text-xs text-charcoal-700">{t('netback.explain')}</p>}
       {benchPerUnit != null && bench.data && (
         <p className="mt-2 flex flex-wrap items-center gap-2 text-xs text-charcoal-700">

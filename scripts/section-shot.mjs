@@ -1,0 +1,16 @@
+import { chromium } from 'playwright';
+const [w, h] = (process.env.SIZE ?? '1440x900').split('x').map(Number);
+const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
+const page = await browser.newPage({ viewport: { width: w, height: h } });
+page.setDefaultTimeout(120000);
+const logs = [];
+page.on('console', (m) => { if (m.type() === 'error') logs.push(m.text().slice(0, 160)) });
+page.on('pageerror', (e) => logs.push('PAGEERROR ' + e.message.slice(0, 200)));
+await page.goto((process.env.BASE ?? 'http://localhost:4173') + (process.env.PATH_ ?? '/'), { waitUntil: 'load' });
+await page.waitForTimeout(4000);
+await page.locator(process.env.SEL ?? '#cc-title').scrollIntoViewIfNeeded();
+await page.evaluate((d) => window.scrollBy(0, d), Number(process.env.DY ?? -40));
+await page.waitForTimeout(Number(process.env.WAIT ?? 9000));
+await page.screenshot({ path: process.env.OUT ?? 'qa/showcase.png' });
+await browser.close();
+console.log(logs.length ? [...new Set(logs)].join('\n') : 'no console errors');

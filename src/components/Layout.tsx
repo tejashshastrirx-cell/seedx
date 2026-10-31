@@ -70,6 +70,13 @@ export function Layout() {
   const loc = useLocation()
   const nav = useNavigate()
   useEffect(() => setOpen(false), [loc.pathname])
+  const [atTop, setAtTop] = useState(true)
+  useEffect(() => {
+    const on = () => setAtTop(window.scrollY < 24)
+    on(); window.addEventListener('scroll', on, { passive: true })
+    return () => window.removeEventListener('scroll', on)
+  }, [])
+  const overHero = loc.pathname === '/' && atTop && !open
 
   const accountLinks = user ? [
     { to: '/dashboard', k: 'nav.dashboard' },
@@ -87,9 +94,9 @@ export function Layout() {
   return (
     <div className="flex min-h-dvh flex-col">
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-50 focus:rounded-xl focus:bg-white focus:p-3">{t('nav.skip')}</a>
-      <header className="sticky top-0 z-30 border-b border-forest-100 bg-cream-100/92 backdrop-blur">
+      <header className={cx('sticky top-0 z-30 border-b border-forest-100 bg-cream-100/92 backdrop-blur transition-colors duration-300', overHero && 'header-over-hero')}>
         <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4">
-          <Link to="/" className="no-underline" aria-label="SEED X home"><Logo /></Link>
+          <Link to="/" className="no-underline" aria-label="SEED X home"><Logo inverted={overHero} /></Link>
           <nav className="ml-6 hidden items-center gap-1 lg:flex" aria-label="Primary">
             {publicLinks.map((l) => (
               <NavLink key={l.to} to={l.to} className={({ isActive }) => cx('rounded-xl px-3 py-2 text-sm font-semibold no-underline', isActive ? 'bg-forest-100 text-forest-800' : 'text-charcoal-700 hover:bg-forest-50')}>{t(l.k)}</NavLink>

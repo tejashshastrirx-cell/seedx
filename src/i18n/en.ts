@@ -217,6 +217,29 @@ const en = {
     sources: 'Data sources',
   },
   notFound: { title: 'Page not found', lead: 'The page you are looking for does not exist.', home: 'Go home' },
+  hero: {
+    alt: 'A farmer looks across rain-washed fields towards a collection centre where produce is loaded onto a truck; a road leads to a sunlit town under a passing golden-hour shower.',
+    lead: 'List your harvest, meet real buyer demand, see what you actually take home, and explore shared deliveries with nearby farms - all in Hindi and English.',
+    autoNote: 'Auto shows a default ambience. It is not live weather - no weather service is connected.',
+    scroll: 'Scroll to explore the harvest journey',
+    trustTitle: 'Trust & sources', trustLead: 'Every number on SEED X says where it came from and how fresh it is. Sample data is always labelled.',
+    status_active: 'Active', status_pending_access: 'Awaiting API access', status_paused: 'Paused', lastRow: 'Latest record', noRows: 'No records yet',
+  },
+  showcase: {
+    title: 'ClusterCart, live on real listings.', lead: 'Farms, harvest quantities, pickup order and buyers - with the cost of separate trips against one pooled route, the farmer\'s net and the buyer\'s landed cost. Rotate the table; follow the crates.',
+    computed: 'Computed in your browser by the ClusterCart engine on the published listings and requirements. Records marked Demo are synthetic; transport is an estimate.',
+    farms: 'farms', cta: 'Run ClusterCart on your requirement',
+  },
+  story: {
+    aria: 'SEED X farm-to-market story', scroll: 'Scroll to follow the harvest', weather: 'Weather',
+    w_auto: 'Auto', w_clear: 'Clear', w_dust: 'Dust', w_rain: 'Rain',
+    c1: 'The farm', c2: 'The harvest', c3: 'ClusterCart', c4: 'Transport', c5: 'Buyers',
+    t1: 'Better farming starts with better connections.', d1: '',
+    t2: 'The harvest, listed in two minutes.', d2: 'Grade, quantity, sale window and a price floor the server enforces. The exact pickup point stays private until an order is confirmed.',
+    t3: 'Nearby farms, one smarter truck.', d3: 'ClusterCart checks every compatible harvest nearby, compares separate trips with one pooled route, and recommends pooling only when it genuinely costs less - with the reasons shown.',
+    t4: 'One coordinated route, a permanent record.', d4: 'Stock is reserved atomically when the farmer accepts. Pickup, transit and delivery are recorded; the buyer confirming receipt is the proof of delivery.',
+    t5: 'Straight to the buyers who need it.', d5: 'Hostels, restaurants and retailers see traceable produce and their landed cost - always shown separately from what the farmer actually takes home.',
+  },
   scene: { fallback: 'Illustration: farms connected to a collection hub and a town buyer at golden hour.', loading: 'Loading 3D scene…', failed: '3D scene unavailable - showing illustration.' },
 }
 export default en
