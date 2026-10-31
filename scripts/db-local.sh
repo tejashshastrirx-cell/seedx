@@ -21,6 +21,7 @@ if [ "${1:-}" = "--test" ] || [ "${2:-}" = "--test" ]; then
     echo "$out" | grep -E "^(not ok|# )" || true
     printf '%s: %s passed, %s failed\n' "$t" "$(echo "$out" | grep -c '^ok')" "$(echo "$out" | grep -c '^not ok')"
     echo "$out" | grep -q '^not ok' && status=1
+    if echo "$out" | grep -qE 'ERROR|Looks like you planned'; then echo "$out" | grep -E 'ERROR|Looks like' | head -5; status=1; fi
   done
   exit $status
 fi

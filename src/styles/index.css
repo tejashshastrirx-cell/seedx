@@ -2,12 +2,20 @@
 @import '@fontsource/noto-sans-devanagari/400.css';
 @import '@fontsource/noto-sans-devanagari/600.css';
 @import '@fontsource/noto-sans-devanagari/700.css';
+/* Indic scripts: unicode-range means each file downloads only when that script is on screen. */
+@import '@fontsource-variable/noto-sans-bengali';
+@import '@fontsource-variable/noto-sans-telugu';
+@import '@fontsource-variable/noto-sans-tamil';
+@import '@fontsource-variable/noto-sans-gujarati';
+@import '@fontsource-variable/noto-sans-kannada';
+@import '@fontsource-variable/noto-sans-malayalam';
+@import '@fontsource-variable/noto-sans-gurmukhi';
 @import 'tailwindcss';
 
 /* SEED X design tokens - forest green / warm cream / harvest gold (brand brief). */
 @theme {
-  --font-sans: 'Manrope Variable', 'Noto Sans Devanagari', system-ui, sans-serif;
-  --font-display: 'Manrope Variable', 'Noto Sans Devanagari', system-ui, sans-serif;
+  --font-sans: 'Manrope Variable', 'Noto Sans Devanagari', 'Noto Sans Bengali Variable', 'Noto Sans Telugu Variable', 'Noto Sans Tamil Variable', 'Noto Sans Gujarati Variable', 'Noto Sans Kannada Variable', 'Noto Sans Malayalam Variable', 'Noto Sans Gurmukhi Variable', system-ui, sans-serif;
+  --font-display: 'Manrope Variable', 'Noto Sans Devanagari', 'Noto Sans Bengali Variable', 'Noto Sans Telugu Variable', 'Noto Sans Tamil Variable', 'Noto Sans Gujarati Variable', 'Noto Sans Kannada Variable', 'Noto Sans Malayalam Variable', 'Noto Sans Gurmukhi Variable', system-ui, sans-serif;
 
   --color-forest-50: #eef5f0;
   --color-forest-100: #e6f1e7;
@@ -26,6 +34,7 @@
   --color-gold-400: #e5a63b;
   --color-gold-500: #cf8d22;
   --color-gold-600: #a86d16;
+  --color-gold-700: #7f5310; /* AA on cream for small text */
 
   --color-cream-50: #fbf8f1;
   --color-cream-100: #f5f0e4;
@@ -94,5 +103,5 @@
   .field-input[aria-invalid='true'] { @apply border-danger-600 ring-danger-50; }
   .field-hint { @apply mt-1 text-sm text-charcoal-500; }
   .field-error { @apply mt-1 text-sm font-semibold text-danger-600; }
-  .eyebrow { @apply text-xs font-bold uppercase tracking-[0.16em] text-gold-600; }
+  .eyebrow { @apply text-xs font-bold uppercase tracking-[0.16em] text-gold-700; }
 }

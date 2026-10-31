@@ -21,7 +21,7 @@ export function NetBackChart({ quantity, pricePaisePerUnit, lines, unitLabel, da
       <div>
         <div className="mb-2 flex items-baseline justify-between gap-3">
           <p className="text-sm font-bold">{t('netback.farmer')}</p>
-          <p className="tabular text-right"><span className="text-2xl font-extrabold text-forest-500">{rupees(nb.farmerNetPaise, { whole: true })}</span> <span className={`text-xs ${sub}`}>{t('netback.farmerNet')} · {rupees(nb.farmerNetPerUnitPaise)}/{unitLabel}</span></p>
+          <p className="tabular text-right"><span className={`text-2xl font-extrabold ${dark ? 'text-forest-200' : 'text-forest-600'}`}>{rupees(nb.farmerNetPaise, { whole: true })}</span> <span className={`text-xs ${sub}`}>{t('netback.farmerNet')} · {rupees(nb.farmerNetPerUnitPaise)}/{unitLabel}</span></p>
         </div>
         <div className={`relative h-11 overflow-hidden rounded-xl ${track}`}>
           <motion.div className="absolute inset-y-0 left-0 rounded-xl bg-forest-500" initial={{ width: 0 }} whileInView={{ width: pct(nb.farmerNetPaise) }} viewport={{ once: true }} transition={{ duration: 1, ease }} />

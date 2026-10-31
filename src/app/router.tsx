@@ -23,7 +23,7 @@ const Matching = L(() => import('@/features/buyer/Buyer'), 'MatchingPage')
 const Orders = L(() => import('@/features/orders/Orders'), 'OrdersPage')
 const OrderDetail = L(() => import('@/features/orders/Orders'), 'OrderDetailPage')
 const Logistics = L(() => import('@/features/orders/Orders'), 'LogisticsPage')
-const Notifications = L(() => import('@/features/orders/Orders'), 'NotificationsPage')
+const Notifications = L(() => import('@/features/notifications/Notifications'), 'NotificationsPage')
 const Seeds = L(() => import('@/features/seeds/Seeds'), 'SeedsPage')
 const SeedDetail = L(() => import('@/features/seeds/Seeds'), 'SeedDetailPage')
 const SeedOrders = L(() => import('@/features/seeds/Seeds'), 'SeedOrdersPage')
@@ -45,6 +45,9 @@ const AdminSeeds = L(() => import('@/features/admin/Admin'), 'AdminSeedsPage')
 const AdminSchemes = L(() => import('@/features/admin/Admin'), 'AdminSchemesPage')
 const AdminReports = L(() => import('@/features/admin/Admin'), 'AdminReportsPage')
 const AdminAudit = L(() => import('@/features/admin/Admin'), 'AdminAuditPage')
+const Clients = L(() => import('@/features/network/Network'), 'ClientsPage')
+const Suppliers = L(() => import('@/features/network/Network'), 'SuppliersPage')
+const AdminCatalogue = L(() => import('@/features/admin/Catalogue'), 'AdminCataloguePage')
 
 const S = (el: ReactNode) => <Suspense fallback={<PageLoader />}>{el}</Suspense>
 const auth = (el: ReactNode) => <RequireAuth>{S(el)}</RequireAuth>
@@ -89,9 +92,11 @@ export const router = createBrowserRouter([
         { path: '/farmer/harvest/:id/edit', element: role('farmer', <HarvestForm />) },
         { path: '/farmer/offers', element: role('farmer', <FarmerOffers />) },
         { path: '/farmer/earnings', element: role('farmer', <FarmerEarnings />) },
+        { path: '/farmer/clients', element: role('farmer', <Clients />) },
         { path: '/buyer', element: role('buyer', <BuyerOverview />) },
         { path: '/buyer/requirements', element: role('buyer', <Requirements />) },
         { path: '/buyer/purchases', element: role('buyer', <Purchases />) },
+        { path: '/buyer/suppliers', element: role('buyer', <Suppliers />) },
         { path: '/matching', element: auth(<Matching />) },
         { path: '/logistics', element: role('logistics', <Logistics />) },
         { path: '/orders', element: auth(<Orders />) },
@@ -109,6 +114,7 @@ export const router = createBrowserRouter([
         { path: '/admin/schemes', element: admin(<AdminSchemes />) },
         { path: '/admin/reports', element: admin(<AdminReports />) },
         { path: '/admin/audit-logs', element: admin(<AdminAudit />) },
+        { path: '/admin/catalogue', element: admin(<AdminCatalogue />) },
         { path: '*', element: <NotFoundPage /> },
       ],
     }],

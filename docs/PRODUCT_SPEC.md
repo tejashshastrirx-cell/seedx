@@ -18,4 +18,14 @@ Roles: farmer, buyer, seed seller, logistics partner, landowner, support, admin.
 | Landowner workspace (enquiries; no legal e-signing) | Built |
 | Admin (MFA): roles, moderation, seed certification check, scheme review, CSV price import, audit log | Built |
 | Homepage: photoreal hero + Canvas weather, live ClusterCart 3D, trust & sources | Built + browser QA |
-| Live mandi feed (data.gov.in), payments, SMS | Not built - needs owner API keys/providers |
+| Crop catalogue: 5 categories + fibre/spice/other, 46 crops incl. "Other" per category, 10-language names, admin management | Built + pgTAP + E2E |
+| Marketplace filters: category, crop, state, grade, min quantity, price range, harvest date, hide demo, sort, pagination, saved searches, on-device recent searches | Built + E2E |
+| My Clients (farmer) / My Suppliers (buyer): derived stages lead/saved/enquiry/active/existing/repeat, favourites, private notes | Built + pgTAP + E2E |
+| Notifications: categories, unread/archived views, pagination, archive/delete, preferences, dedupe, delivery records | Built + pgTAP + E2E (email channel = not configured) |
+| Command centres: farmer, buyer, seed seller, logistics, admin entry | Built (real counts only) |
+| Ten languages (en, hi, bn, te, mr, ta, gu, kn, ml, pa) | Built; core journeys 100% in every language, remaining screens fall back to English; native review pending |
+| Payments | Not integrated - orders state "not tracked by SEED X"; seed orders are pay-on-delivery |
+| Live mandi feed (data.gov.in), SMS, email delivery | Not built - needs owner API keys/providers/SMTP |
+
+## Status mapping (no risky state-machine rewrite)
+Listing `withdrawn` = cancelled by the farmer; `expired` set by the expiry job. Order `in_transit` = collected/picked up; `disputed` = delivery issue or failed delivery (raised by either party from in_transit/delivered); every transition is recorded in `order_events`.

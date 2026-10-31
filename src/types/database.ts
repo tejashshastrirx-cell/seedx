@@ -44,6 +44,11 @@ export type Database = {
           default_unit: string
           shelf_life_days: number
           icon: string | null
+          names: Json
+          is_active: boolean
+          is_other: boolean
+          sort_order: number
+          updated_at: string
         }
         Insert: {
           id?: number
@@ -54,6 +59,11 @@ export type Database = {
           default_unit: string
           shelf_life_days: number
           icon?: string | null
+          names: Json
+          is_active?: boolean
+          is_other?: boolean
+          sort_order?: number
+          updated_at?: string
         }
         Update: {
           id?: number
@@ -64,6 +74,32 @@ export type Database = {
           default_unit?: string
           shelf_life_days?: number
           icon?: string | null
+          names?: Json
+          is_active?: boolean
+          is_other?: boolean
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      crop_categories: {
+        Row: {
+          code: string
+          names: Json
+          sort_order: number
+          is_active: boolean
+        }
+        Insert: {
+          code: string
+          names: Json
+          sort_order?: number
+          is_active?: boolean
+        }
+        Update: {
+          code?: string
+          names?: Json
+          sort_order?: number
+          is_active?: boolean
         }
         Relationships: []
       }
@@ -745,6 +781,63 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_deliveries: {
+        Row: {
+          id: number
+          notification_id: string
+          channel: string
+          status: string
+          detail: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: number
+          notification_id: string
+          channel: string
+          status: string
+          detail?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: number
+          notification_id?: string
+          channel?: string
+          status?: string
+          detail?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      notification_preferences: {
+        Row: {
+          user_id: string
+          in_app_offers: boolean
+          in_app_seeds: boolean
+          in_app_matches: boolean
+          in_app_listings: boolean
+          email_enabled: boolean
+          updated_at: string
+        }
+        Insert: {
+          user_id?: string
+          in_app_offers?: boolean
+          in_app_seeds?: boolean
+          in_app_matches?: boolean
+          in_app_listings?: boolean
+          email_enabled?: boolean
+          updated_at?: string
+        }
+        Update: {
+          user_id?: string
+          in_app_offers?: boolean
+          in_app_seeds?: boolean
+          in_app_matches?: boolean
+          in_app_listings?: boolean
+          email_enabled?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           id: string
@@ -756,6 +849,9 @@ export type Database = {
           payload: Json
           read_at: string | null
           created_at: string
+          archived_at: string | null
+          dedupe_key: string | null
+          category: string | null
         }
         Insert: {
           id?: string
@@ -767,6 +863,9 @@ export type Database = {
           payload?: Json
           read_at?: string | null
           created_at?: string
+          archived_at?: string | null
+          dedupe_key?: string | null
+          category?: string | null
         }
         Update: {
           id?: string
@@ -778,6 +877,9 @@ export type Database = {
           payload?: Json
           read_at?: string | null
           created_at?: string
+          archived_at?: string | null
+          dedupe_key?: string | null
+          category?: string | null
         }
         Relationships: []
       }
@@ -1168,6 +1270,33 @@ export type Database = {
         }
         Relationships: []
       }
+      saved_searches: {
+        Row: {
+          id: string
+          owner_id: string
+          scope: string
+          name: string
+          filters: Json
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          owner_id?: string
+          scope: string
+          name: string
+          filters: Json
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          owner_id?: string
+          scope?: string
+          name?: string
+          filters?: Json
+          created_at?: string
+        }
+        Relationships: []
+      }
       scheme_reviews: {
         Row: {
           id: number
@@ -1435,6 +1564,42 @@ export type Database = {
         }
         Relationships: []
       }
+      trade_contacts: {
+        Row: {
+          id: string
+          owner_id: string
+          counterparty_id: string
+          kind: string
+          manual_stage: string
+          is_favourite: boolean
+          private_note: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          owner_id?: string
+          counterparty_id: string
+          kind: string
+          manual_stage?: string
+          is_favourite?: boolean
+          private_note?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          owner_id?: string
+          counterparty_id?: string
+          kind?: string
+          manual_stage?: string
+          is_favourite?: boolean
+          private_note?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
@@ -1484,10 +1649,14 @@ export type Database = {
       admin_overview: { Args: Record<PropertyKey, never>; Returns: Json }
       admin_review_role: { Args: { p_role_id: string; p_decision: string; p_note?: string }; Returns: Json }
       admin_review_scheme: { Args: { p_scheme_id: string; p_to_status: string; p_note?: string }; Returns: Json }
+      admin_upsert_commodity: { Args: { p_code: string; p_category: string; p_names: Json; p_default_unit: string; p_shelf_life_days: number; p_is_active?: boolean; p_sort_order?: unknown }; Returns: Json }
       admin_verify_seed_certification: { Args: { p_product_id: string; p_note: string }; Returns: undefined }
+      archive_notifications: { Args: { p_ids: string[]; p_archive?: boolean }; Returns: number }
       assign_logistics: { Args: { p_order_id: string; p_provider_id: string }; Returns: Json }
       counter_offer: { Args: { p_offer_id: string; p_price_paise_per_unit: number; p_quantity?: number; p_message?: string }; Returns: Json }
+      expire_stale_listings: { Args: Record<PropertyKey, never>; Returns: number }
       list_logistics_providers: { Args: Record<PropertyKey, never>; Returns: Json }
+      list_trade_contacts: { Args: { p_kind: string }; Returns: Json }
       logistics_jobs: { Args: Record<PropertyKey, never>; Returns: Json }
       mark_notifications_read: { Args: { p_ids?: string[] }; Returns: number }
       place_seed_order: { Args: { p_product_id: string; p_packs: number; p_delivery_state: string; p_delivery_district: string; p_delivery_address: string; p_idempotency_key: string }; Returns: Json }

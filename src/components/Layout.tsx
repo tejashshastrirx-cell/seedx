@@ -5,7 +5,8 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Bell, Languages, LayoutDashboard, LogOut, Menu, Package, ShoppingBasket, Sprout, Truck, Users, X } from 'lucide-react'
 import { useAuth } from '@/app/auth'
 import { supabase, supabaseConfigured } from '@/lib/supabase'
-import { writePrefs } from '@/lib/prefs'
+import { readPrefs, writePrefs } from '@/lib/prefs'
+import { LANGUAGES, isLangCode, type LangCode } from '@/i18n/languages'
 import { Logo } from './Logo'
 import { Button, Notice, cx } from './ui'
 import { PageTransition } from './motion'
@@ -17,13 +18,44 @@ const publicLinks = [
 
 export function LanguageSwitch({ className }: { className?: string }) {
   const { i18n, t } = useTranslation()
-  const next = i18n.language === 'hi' ? 'en' : 'hi'
+  const { user } = useAuth()
+  const qc = useQueryClient()
+  const current = isLangCode(i18n.language) ? i18n.language : 'en'
+  async function choose(code: LangCode) {
+    await i18n.changeLanguage(code)
+    writePrefs({ lang: code })
+    if (user) {
+      // Stored per account so the choice follows the user to other devices (validated by a DB check constraint).
+      await supabase.from('profiles').update({ preferred_language: code }).eq('id', user.id)
+      void qc.invalidateQueries({ queryKey: ['me', 'profile'] })
+    }
+  }
   return (
-    <button type="button" className={cx('inline-flex min-h-11 items-center gap-1.5 rounded-xl px-3 text-sm font-bold text-forest-800 hover:bg-forest-100', className)}
-      onClick={() => { void i18n.changeLanguage(next); writePrefs({ lang: next }) }} aria-label={t('common.language')}>
-      <Languages aria-hidden className="size-4" />{next === 'hi' ? 'हिंदी' : 'English'}
-    </button>
+    <label className={cx('relative inline-flex min-h-11 items-center gap-1.5 rounded-xl px-2 text-sm font-bold text-forest-800 hover:bg-forest-100', className)}>
+      <Languages aria-hidden className="size-4 shrink-0" />
+      <span className="sr-only">{t('lang.choose')}</span>
+      <select data-testid="language-select" value={current} onChange={(e) => void choose(e.target.value as LangCode)}
+        className="min-h-11 cursor-pointer appearance-none bg-transparent pr-1 font-bold focus:outline-none" aria-label={t('lang.choose')}>
+        {LANGUAGES.map((l) => <option key={l.code} value={l.code} lang={l.code}>{l.native}{l.code !== 'en' ? ` · ${l.english}` : ''}</option>)}
+      </select>
+    </label>
   )
+}
+
+/** Keeps the UI language and profiles.preferred_language in step after sign-in. */
+function LanguageSync() {
+  const { i18n } = useTranslation()
+  const { user, profile } = useAuth()
+  useEffect(() => {
+    if (!user || !profile) return
+    // An explicit choice on this device wins locally; otherwise adopt the account's saved language.
+    // Profiles are only written when the user actively picks a language (see LanguageSwitch).
+    if (isLangCode(readPrefs().lang)) return
+    if (isLangCode(profile.preferred_language) && profile.preferred_language !== i18n.language) {
+      void i18n.changeLanguage(profile.preferred_language)
+    }
+  }, [user, profile, i18n])
+  return null
 }
 
 function NotificationBell() {
@@ -80,8 +112,8 @@ export function Layout() {
 
   const accountLinks = user ? [
     { to: '/dashboard', k: 'nav.dashboard' },
-    ...(hasRole('farmer') ? [{ to: '/farmer', k: 'nav.farmer' }, { to: '/farmer/harvest', k: 'nav.harvest' }, { to: '/farmer/offers', k: 'nav.offers' }, { to: '/farmer/earnings', k: 'nav.earnings' }] : []),
-    ...(hasRole('buyer') ? [{ to: '/buyer', k: 'nav.buyer' }, { to: '/buyer/requirements', k: 'nav.requirements' }, { to: '/buyer/purchases', k: 'nav.purchases' }, { to: '/matching', k: 'nav.matching' }] : []),
+    ...(hasRole('farmer') ? [{ to: '/farmer', k: 'nav.farmer' }, { to: '/farmer/harvest', k: 'nav.harvest' }, { to: '/farmer/offers', k: 'nav.offers' }, { to: '/farmer/earnings', k: 'nav.earnings' }, { to: '/farmer/clients', k: 'nav.clients' }] : []),
+    ...(hasRole('buyer') ? [{ to: '/buyer', k: 'nav.buyer' }, { to: '/buyer/requirements', k: 'nav.requirements' }, { to: '/buyer/purchases', k: 'nav.purchases' }, { to: '/buyer/suppliers', k: 'nav.suppliers' }, { to: '/matching', k: 'nav.matching' }] : []),
     ...(hasRole('logistics') ? [{ to: '/logistics', k: 'nav.logistics' }] : []),
     { to: '/orders', k: 'nav.orders' }, { to: '/seeds/orders', k: 'nav.seedOrders' },
     ...(hasRole('seed_seller') ? [{ to: '/seeds/manage', k: 'nav.seedManage' }] : []),
@@ -93,6 +125,7 @@ export function Layout() {
 
   return (
     <div className="flex min-h-dvh flex-col">
+      <LanguageSync />
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-50 focus:rounded-xl focus:bg-white focus:p-3">{t('nav.skip')}</a>
       <header className={cx('sticky top-0 z-30 border-b border-forest-100 bg-cream-100/92 backdrop-blur transition-colors duration-300', overHero && 'header-over-hero')}>
         <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4">
@@ -176,7 +209,7 @@ export function Layout() {
           <div className="text-sm text-cream-200">
             <p>{t('footer.privacy')}</p>
             <p className="mt-3">{t('footer.demoNote')}</p>
-            <p className="mt-3">{t('footer.sources')}: <a className="text-gold-300" href="https://data.gov.in/" target="_blank" rel="noreferrer">data.gov.in</a> · <a className="text-gold-300" href="https://pib.gov.in/" target="_blank" rel="noreferrer">PIB</a></p>
+            <p className="mt-3">{t('footer.sources')}: <a className="text-gold-300 underline" href="https://data.gov.in/" target="_blank" rel="noreferrer">data.gov.in</a> · <a className="text-gold-300 underline" href="https://pib.gov.in/" target="_blank" rel="noreferrer">PIB</a></p>
           </div>
         </div>
         <div className="border-t border-forest-700 py-4 text-center text-xs text-cream-200">© {new Date().getFullYear()} SEED X · {t('brand.supporting')}</div>

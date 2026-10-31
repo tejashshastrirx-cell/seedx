@@ -19,7 +19,13 @@ export async function clientFor(email: string) {
   return c
 }
 
-export async function uiLogin(page: Page, email: string) {
+/** Pin this browser's UI language (device preference) before the app boots. */
+export async function pinLanguage(page: Page, lang = 'en') {
+  await page.addInitScript((l) => { try { localStorage.setItem('seedx.prefs.v1', JSON.stringify({ ...JSON.parse(localStorage.getItem('seedx.prefs.v1') ?? '{}'), lang: l })) } catch { /* ignore */ } }, lang)
+}
+
+export async function uiLogin(page: Page, email: string, lang = 'en') {
+  await pinLanguage(page, lang)
   await page.goto('/login')
   await page.getByLabel('Email').fill(email)
   await page.getByLabel('Password').fill(PW)

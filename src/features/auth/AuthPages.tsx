@@ -91,7 +91,7 @@ export function SignupPage() {
       email: v.email,
       password: v.password,
       // Only cosmetic metadata. Roles are NEVER taken from signup metadata.
-      options: { emailRedirectTo: redirectTo('/auth/callback?next=/dashboard'), data: { display_name: v.displayName, preferred_language: i18n.language === 'hi' ? 'hi' : 'en' } },
+      options: { emailRedirectTo: redirectTo('/auth/callback?next=/dashboard'), data: { display_name: v.displayName, preferred_language: i18n.language } },
     })
     if (error) { setServerErr(error.status === 429 ? t('errors.rateLimited') : error.message); return }
     setSentTo(v.email)

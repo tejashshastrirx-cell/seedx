@@ -10,13 +10,14 @@ import { toast } from 'sonner'
 import type { Unit } from '@shared/clustercart'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/app/auth'
-import { DISTRICT_CENTROIDS, INDIAN_STATES, useCommodities, useCommodityName, useVarieties } from '@/lib/catalog'
+import { DISTRICT_CENTROIDS, INDIAN_STATES, useCommodityName, useVarieties } from '@/lib/catalog'
 import { date, dateTime, perUnit, qty, rupees, toPaise, unitShort } from '@/lib/format'
 import { friendlyError } from '@/lib/errors'
 import { newIdempotencyKey } from '@/lib/idempotency'
 import { Badge, Button, Card, DemoBadge, EmptyState, ErrorState, LinkButton, Notice, PageHeader, PageLoader, SelectField, Sheet, Stat, StatusBadge, TextAreaField, TextField } from '@/components/ui'
 import { NetBackPanel } from '@/features/marketplace/NetBackPanel'
 import { Bar } from '@/components/motion'
+import { CommodityOptions } from '@/components/CommodityOptions'
 
 export function useMyListings() {
   const { user } = useAuth()
@@ -128,11 +129,10 @@ const plusDays = (n: number) => new Date(Date.now() + n * 86_400_000).toISOStrin
 
 export function HarvestFormPage() {
   const { id } = useParams()
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const { user, profile } = useAuth()
   const nav = useNavigate()
   const qc = useQueryClient()
-  const commodities = useCommodities()
   const varieties = useVarieties()
   const fileRef = useRef<HTMLInputElement>(null)
   const [uploading, setUploading] = useState(false)
@@ -254,7 +254,7 @@ export function HarvestFormPage() {
         <Card className="grid gap-4 p-5 sm:grid-cols-2">
           <SelectField label={t('common.commodity')} {...register('commodity_id')} error={errors.commodity_id && t('errors.validation')} disabled={!!l && l.status !== 'draft'}>
             <option value="">—</option>
-            {commodities.data?.map((c) => <option key={c.id} value={c.id}>{i18n.language === 'hi' ? `${c.name_hi} (${c.name_en})` : c.name_en}</option>)}
+            <CommodityOptions bilingual />
           </SelectField>
           <SelectField label={t('common.variety')} optional {...register('variety_id')}>
             <option value="">—</option>

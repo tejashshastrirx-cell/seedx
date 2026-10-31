@@ -6,3 +6,6 @@
 - Do not fabricate prices, weather, counts, savings or routes; label sample data. Transport costs are estimates.
 - Checks: `npx tsc -b`, `npm test`, `npm run db:test`, `npm run build`, `npx playwright test` (live dev project, synthetic accounts).
 - Three.js only for data visualisation; hero weather is Canvas 2D (`src/features/hero/weather.ts`).
+- Ten languages (`src/i18n/*.ts`, list in `languages.ts` = DB `app_private.supported_languages()`); new strings go in `en.ts` first, then translate at least core namespaces; run `npm test` + `npx tsx scripts/i18n-coverage.ts`. Crop names live in DB `names` jsonb (edit via `/admin/catalogue`).
+- Never edit an applied migration; add a forward one. Verify the project ref (`jssvwvhqlmijxujquksw`) before any remote change; never touch `ucjoivgcljvilstqqiyl`.
+- Docs live in `docs/` (see README). Test counts: unit 72, pgTAP 141, E2E 14 (incl. 3 axe scans).

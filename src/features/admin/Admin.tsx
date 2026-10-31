@@ -9,10 +9,10 @@ import { friendlyError } from '@/lib/errors'
 import { useCommodityName } from '@/lib/catalog'
 import { Badge, Button, Card, DemoBadge, EmptyState, ErrorState, PageHeader, PageLoader, Stat, StatusBadge, TextAreaField, TextField, cx } from '@/components/ui'
 
-function AdminNav() {
+export function AdminNav() {
   const { t } = useTranslation()
   const links = [['/admin', 'admin.title'], ['/admin/users', 'admin.users'], ['/admin/listings', 'admin.listings'], ['/admin/orders', 'admin.orders'], ['/admin/seeds', 'admin.seeds'],
-    ['/admin/schemes', 'admin.schemes'], ['/admin/reports', 'admin.reports'], ['/admin/audit-logs', 'admin.audit']]
+    ['/admin/schemes', 'admin.schemes'], ['/admin/catalogue', 'catalogue.title'], ['/admin/reports', 'admin.reports'], ['/admin/audit-logs', 'admin.audit']]
   return (
     <nav className="mb-6 flex gap-2 overflow-x-auto pb-1" aria-label="Admin">
       {links.map(([to, k]) => <NavLink key={to} to={to} end className={({ isActive }) => cx('whitespace-nowrap rounded-xl px-3 py-2 text-sm font-bold no-underline', isActive ? 'bg-forest-700 text-white' : 'bg-white text-forest-800')}>{t(k)}</NavLink>)}

@@ -2,16 +2,18 @@ import { useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Flag, MapPin, ShoppingBasket, SlidersHorizontal, Sprout } from 'lucide-react'
+import { Bookmark, Flag, MapPin, ShoppingBasket, SlidersHorizontal, Sprout, X } from 'lucide-react'
 import { toast } from 'sonner'
 import type { Unit } from '@shared/clustercart'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/app/auth'
-import { INDIAN_STATES, useCommodities, useCommodityName, useVarieties } from '@/lib/catalog'
+import { INDIAN_STATES, useCommodities, useCommodityName, useCropCategories, useVarieties, localName } from '@/lib/catalog'
+import { clearRecent, pushRecent, readRecent } from '@/lib/searchHistory'
 import { date, perUnit, qty, rupees, toPaise, unitShort } from '@/lib/format'
 import { friendlyError } from '@/lib/errors'
 import { Badge, Button, Card, DemoBadge, EmptyState, ErrorState, LinkButton, Notice, PageHeader, PageLoader, Pager, SelectField, Sheet, Skeleton, StatusBadge, TextAreaField, TextField, cx } from '@/components/ui'
 import { NetBackPanel } from './NetBackPanel'
+import { CommodityOptions } from '@/components/CommodityOptions'
 
 const PAGE = 12
 
@@ -29,26 +31,68 @@ function useFilters() {
 
 export function MarketplacePage() {
   const { t, i18n } = useTranslation()
-  const { get, set } = useFilters()
-  const commodities = useCommodities()
+  const { get, set, params } = useFilters()
+  const { user } = useAuth()
+  const qc = useQueryClient()
   const name = useCommodityName()
+  const commodities = useCommodities()
+  const categories = useCropCategories()
+  const [recent, setRecent] = useState(readRecent)
   const tab = get('tab') === 'demand' ? 'demand' : 'listings'
   const page = Number(get('page') || 0)
   const [sheet, setSheet] = useState(false)
-  const filters = { crop: get('crop'), state: get('state'), grade: get('grade'), q: get('q') }
+  const filters = { cat: get('cat'), crop: get('crop'), state: get('state'), grade: get('grade'), q: get('q'), minQty: get('minQty'),
+    minPrice: get('minPrice'), maxPrice: get('maxPrice'), harvestFrom: get('harvestFrom'), real: get('real') }
+  const sort = get('sort') || 'newest'
+  const catIds = filters.cat ? (commodities.data ?? []).filter((c) => c.category === filters.cat).map((c) => c.id) : null
+  const rupeeFilter = (v: string) => (v && Number(v) > 0 ? Math.round(Number(v) * 100) : null)
+  const saved = useQuery({
+    queryKey: ['saved-searches', user?.id], enabled: !!user,
+    queryFn: async () => { const { data, error } = await supabase.from('saved_searches').select('*').eq('scope', 'marketplace').order('created_at', { ascending: false }); if (error) throw error; return data },
+  })
+  const saveSearch = useMutation({
+    mutationFn: async (label: string) => {
+      const f = Object.fromEntries([...params.entries()].filter(([k]) => k !== 'page'))
+      const { error } = await supabase.from('saved_searches').insert({ scope: 'marketplace', name: label.slice(0, 60), filters: f })
+      if (error) throw error
+    },
+    onSuccess: () => { toast.success(t('market.searchSaved')); void qc.invalidateQueries({ queryKey: ['saved-searches'] }) },
+    onError: (e) => toast.error(friendlyError(e, t)),
+  })
+  const deleteSearch = useMutation({
+    mutationFn: async (id: string) => { const { error } = await supabase.from('saved_searches').delete().eq('id', id); if (error) throw error },
+    onSuccess: () => void qc.invalidateQueries({ queryKey: ['saved-searches'] }),
+  })
+  const applySaved = (f: unknown) => {
+    const blank = Object.fromEntries(Object.keys(filters).map((k) => [k, ''])) as Record<string, string>
+    set({ ...blank, sort: '', tab: '', ...((f ?? {}) as Record<string, string>) })
+  }
+  const setQuery = (v: string) => { if (v.trim()) setRecent(pushRecent(v)); set({ q: v }) }
 
   const listings = useQuery({
-    queryKey: ['marketplace', tab, filters, page],
+    queryKey: ['marketplace', tab, filters, sort, page, catIds?.join(',')],
+    enabled: !filters.cat || !!commodities.data,
     queryFn: async () => {
       if (tab === 'listings') {
         let q = supabase.from('harvest_listings')
           .select('id,title,commodity_id,grade,unit,available_quantity,asking_price_paise_per_unit,min_price_paise_per_unit,district,state,available_until,status,is_demo,farmer_id', { count: 'exact' })
           .in('status', ['published', 'partially_reserved']).gte('available_until', new Date().toISOString().slice(0, 10))
         if (filters.crop) q = q.eq('commodity_id', Number(filters.crop))
+        else if (catIds) q = q.in('commodity_id', catIds.length ? catIds : [-1])
         if (filters.state) q = q.eq('state', filters.state)
         if (filters.grade) q = q.eq('grade', filters.grade)
         if (filters.q) q = q.ilike('title', `%${filters.q.replace(/[%_]/g, '')}%`)
-        const { data, error, count } = await q.order('created_at', { ascending: false }).range(page * PAGE, page * PAGE + PAGE - 1)
+        if (Number(filters.minQty) > 0) q = q.gte('available_quantity', Number(filters.minQty))
+        if (rupeeFilter(filters.minPrice)) q = q.gte('min_price_paise_per_unit', rupeeFilter(filters.minPrice)!)
+        if (rupeeFilter(filters.maxPrice)) q = q.lte('min_price_paise_per_unit', rupeeFilter(filters.maxPrice)!)
+        if (filters.harvestFrom) q = q.gte('harvest_date', filters.harvestFrom)
+        if (filters.real) q = q.eq('is_demo', false)
+        q = sort === 'price_asc' ? q.order('min_price_paise_per_unit', { ascending: true })
+          : sort === 'price_desc' ? q.order('min_price_paise_per_unit', { ascending: false })
+          : sort === 'qty_desc' ? q.order('available_quantity', { ascending: false })
+          : sort === 'ending' ? q.order('available_until', { ascending: true })
+          : q.order('created_at', { ascending: false })
+        const { data, error, count } = await q.order('id').range(page * PAGE, page * PAGE + PAGE - 1)
         if (error) throw error
         return { rows: data, count: count ?? 0, kind: 'listings' as const }
       }
@@ -56,23 +100,50 @@ export function MarketplacePage() {
         .select('id,title,commodity_id,min_grade,unit,quantity,filled_quantity,max_price_paise_per_unit,delivery_district,delivery_state,delivery_until,buyer_type,status,is_demo', { count: 'exact' })
         .eq('visibility', 'public').in('status', ['open', 'partially_filled'])
       if (filters.crop) q = q.eq('commodity_id', Number(filters.crop))
+      else if (catIds) q = q.in('commodity_id', catIds.length ? catIds : [-1])
       if (filters.state) q = q.eq('delivery_state', filters.state)
       if (filters.grade) q = q.eq('min_grade', filters.grade)
       if (filters.q) q = q.ilike('title', `%${filters.q.replace(/[%_]/g, '')}%`)
-      const { data, error, count } = await q.order('created_at', { ascending: false }).range(page * PAGE, page * PAGE + PAGE - 1)
+      if (Number(filters.minQty) > 0) q = q.gte('quantity', Number(filters.minQty))
+      if (rupeeFilter(filters.minPrice)) q = q.gte('max_price_paise_per_unit', rupeeFilter(filters.minPrice)!)
+      if (rupeeFilter(filters.maxPrice)) q = q.lte('max_price_paise_per_unit', rupeeFilter(filters.maxPrice)!)
+      if (filters.real) q = q.eq('is_demo', false)
+      q = sort === 'price_asc' ? q.order('max_price_paise_per_unit', { ascending: true })
+        : sort === 'price_desc' ? q.order('max_price_paise_per_unit', { ascending: false })
+        : sort === 'qty_desc' ? q.order('quantity', { ascending: false })
+        : sort === 'ending' ? q.order('delivery_until', { ascending: true })
+        : q.order('created_at', { ascending: false })
+      const { data, error, count } = await q.order('id').range(page * PAGE, page * PAGE + PAGE - 1)
       if (error) throw error
       return { rows: data, count: count ?? 0, kind: 'demand' as const }
     },
   })
 
   const active = Object.entries(filters).filter(([, v]) => v)
+  const chipLabel = (k: string, v: string) => k === 'crop' ? name(Number(v))
+    : k === 'cat' ? localName(categories.data?.find((c) => c.code === v)?.names, i18n.language, v)
+    : k === 'real' ? t('market.hideDemo') : `${t(`market.chip.${k}`, { defaultValue: '' })} ${v}`.trim()
   const filterControls = (
     <div className="grid gap-4">
-      <TextField label={t('common.search')} defaultValue={filters.q} onKeyDown={(e) => { if (e.key === 'Enter') set({ q: (e.target as HTMLInputElement).value }) }}
-        onBlur={(e) => e.target.value !== filters.q && set({ q: e.target.value })} placeholder="Sharbati…" />
+      <TextField key={filters.q} label={t('common.search')} defaultValue={filters.q} onKeyDown={(e) => { if (e.key === 'Enter') setQuery((e.target as HTMLInputElement).value) }}
+        onBlur={(e) => e.target.value !== filters.q && setQuery(e.target.value)} placeholder="Sharbati…" />
+      {recent.length > 0 && (
+        <div className="-mt-2 flex flex-wrap items-center gap-1.5" aria-label={t('market.recent')}>
+          <span className="text-xs font-semibold text-charcoal-500">{t('market.recent')}:</span>
+          {recent.slice(0, 5).map((r) => <button key={r} type="button" className="rounded-full bg-cream-200 px-2.5 py-1 text-xs font-semibold" onClick={() => set({ q: r })}>{r}</button>)}
+          <button type="button" className="text-xs underline" onClick={() => { clearRecent(); setRecent([]) }}>{t('market.clearRecent')}</button>
+        </div>
+      )}
+      <SelectField label={t('market.sort')} value={sort} onChange={(e) => set({ sort: e.target.value === 'newest' ? '' : e.target.value })}>
+        {['newest', 'price_asc', 'price_desc', 'qty_desc', 'ending'].map((k) => <option key={k} value={k}>{t(`market.sorts.${k}`)}</option>)}
+      </SelectField>
+      <SelectField label={t('market.category')} value={filters.cat} onChange={(e) => set({ cat: e.target.value, crop: '' })}>
+        <option value="">{t('common.all')}</option>
+        {categories.data?.map((c) => <option key={c.code} value={c.code}>{localName(c.names, i18n.language, c.code)}</option>)}
+      </SelectField>
       <SelectField label={t('common.commodity')} value={filters.crop} onChange={(e) => set({ crop: e.target.value })}>
         <option value="">{t('common.all')}</option>
-        {commodities.data?.map((c) => <option key={c.id} value={c.id}>{i18n.language === 'hi' ? c.name_hi : c.name_en}</option>)}
+        <CommodityOptions />
       </SelectField>
       <SelectField label={t('listing.state')} value={filters.state} onChange={(e) => set({ state: e.target.value })}>
         <option value="">{t('common.all')}</option>
@@ -82,6 +153,27 @@ export function MarketplacePage() {
         <option value="">{t('common.any')}</option>
         {['A', 'B', 'C', 'ungraded'].map((g) => <option key={g}>{g}</option>)}
       </SelectField>
+      <TextField key={`mq${filters.minQty}`} label={t('market.minQty')} type="number" min={0} inputMode="decimal" defaultValue={filters.minQty} onBlur={(e) => e.target.value !== filters.minQty && set({ minQty: e.target.value })} />
+      <div className="grid grid-cols-2 gap-2">
+        <TextField key={`p1${filters.minPrice}`} label={t('market.minPrice')} type="number" min={0} inputMode="decimal" defaultValue={filters.minPrice} onBlur={(e) => e.target.value !== filters.minPrice && set({ minPrice: e.target.value })} />
+        <TextField key={`p2${filters.maxPrice}`} label={t('market.maxPrice')} type="number" min={0} inputMode="decimal" defaultValue={filters.maxPrice} onBlur={(e) => e.target.value !== filters.maxPrice && set({ maxPrice: e.target.value })} />
+      </div>
+      <p className="-mt-2 text-xs text-charcoal-500">{t('market.priceHint')}</p>
+      {tab === 'listings' && <TextField label={t('market.harvestFrom')} type="date" value={filters.harvestFrom} onChange={(e) => set({ harvestFrom: e.target.value })} />}
+      <label className="flex min-h-11 items-center gap-2 text-sm font-bold"><input type="checkbox" className="size-5" checked={!!filters.real} onChange={(e) => set({ real: e.target.checked ? '1' : '' })} />{t('market.hideDemo')}</label>
+      {user && (
+        <div className="grid gap-2 border-t border-cream-200 pt-3">
+          <Button size="sm" variant="secondary" disabled={saveSearch.isPending || !active.length || categories.isLoading} onClick={() => saveSearch.mutate(active.map(([k, v]) => chipLabel(k, v)).join(' · ') || t('market.allListings'))}>
+            <Bookmark aria-hidden className="size-4" />{t('market.saveSearch')}
+          </Button>
+          {saved.data?.map((s) => (
+            <div key={s.id} className="flex items-center gap-1">
+              <button type="button" className="flex-1 truncate rounded-lg bg-forest-50 px-2 py-1.5 text-left text-sm font-semibold" onClick={() => applySaved(s.filters)}>{s.name}</button>
+              <button type="button" className="grid size-9 place-items-center rounded-lg hover:bg-cream-200" aria-label={`${t('common.delete')} ${s.name}`} onClick={() => deleteSearch.mutate(s.id)}><X aria-hidden className="size-4" /></button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 
@@ -104,13 +196,13 @@ export function MarketplacePage() {
             <span className="text-sm font-semibold text-charcoal-700" aria-live="polite">{listings.data ? t('common.results', { count: listings.data.count }) : ''}</span>
             {active.map(([k, v]) => (
               <button key={k} onClick={() => set({ [k]: '' })} className="rounded-full bg-forest-100 px-3 py-1.5 text-xs font-bold text-forest-800" aria-label={`${t('common.reset')} ${k}`}>
-                {k === 'crop' ? name(Number(v)) : v} ✕
+                {chipLabel(k, v)} ✕
               </button>
             ))}
           </div>
           {listings.isLoading ? <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-48" />)}</div>
             : listings.error ? <ErrorState message={friendlyError(listings.error, t)} onRetry={() => listings.refetch()} />
-            : !listings.data?.rows.length ? <EmptyState icon={<ShoppingBasket aria-hidden />} title={t('common.noResults')} action={active.length ? <Button variant="secondary" onClick={() => set({ crop: '', state: '', grade: '', q: '' })}>{t('common.clearFilters')}</Button> : undefined} />
+            : !listings.data?.rows.length ? <EmptyState icon={<ShoppingBasket aria-hidden />} title={t('common.noResults')} action={active.length ? <Button variant="secondary" onClick={() => set(Object.fromEntries(Object.keys(filters).map((k) => [k, ''])))}>{t('common.clearFilters')}</Button> : undefined} />
             : (
               <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {listings.data.kind === 'listings' ? listings.data.rows.map((l) => (

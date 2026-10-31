@@ -2,7 +2,7 @@
  * SEED X scene manifest. Only real, published Spline scene URLs may be added here.
  * URLs come from env vars (VITE_SPLINE_HERO_FARM_URL, VITE_SPLINE_CHARACTER_TRIO_URL,
  * VITE_SPLINE_FARMER_GUIDE_URL, VITE_SPLINE_HARVEST_JOURNEY_URL). Until the owner publishes the
- * SEED X scenes in Spline (see docs/SPLINE_SCENES.md) every scene is `awaiting_authoring` and the
+ * SEED X scenes in Spline (see docs/SPLINE_ASSETS.md) every scene is `awaiting_authoring` and the
  * app renders its built-in fallback. Never paste an arbitrary public scene URL.
  */
 export type SceneStatus = 'published' | 'awaiting_authoring'

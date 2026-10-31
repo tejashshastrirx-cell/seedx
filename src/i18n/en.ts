@@ -12,6 +12,7 @@ const en = {
     purchases: 'Purchases', matching: 'ClusterCart', logistics: 'Deliveries', orders: 'Orders', seedOrders: 'Seed orders',
     seedManage: 'My seed products', savedSchemes: 'Saved schemes', landowner: 'Land', profile: 'Profile', notifications: 'Notifications',
     settings: 'Settings', admin: 'Admin', menu: 'Menu', skip: 'Skip to content', more: 'More',
+    clients: 'My clients', suppliers: 'My suppliers',
   },
   common: {
     loading: 'Loading…', save: 'Save', saving: 'Saving…', cancel: 'Cancel', submit: 'Submit', retry: 'Try again', close: 'Close',
@@ -40,7 +41,7 @@ const en = {
   home: {
     eyebrow: 'Farmer-first agricultural commerce',
     title: 'Better farming starts with better connections.',
-    lead: 'List your harvest, meet real buyer demand, see what you actually take home, and pool deliveries with nearby farms - all in Hindi and English.',
+    lead: 'List your harvest, meet real buyer demand, see what you actually take home, and pool deliveries with nearby farms - in ten Indian languages.',
     ctaFarmer: 'I am a farmer', ctaBuyer: 'I buy produce', ctaExplore: 'Explore the marketplace',
     pillarsTitle: 'Four connected services, one trusted record',
     p1t: 'Direct market access', p1d: 'Harvest listings, buyer requirements, offers, counter-offers and orders with a full timeline.',
@@ -60,7 +61,7 @@ const en = {
     teamTitle: 'The team', tejashRole: 'Founder, Creator & Product Lead', shauryaRole: 'Co-developer & Technical Collaborator',
     dhruvRole: 'Fictional Farmer Guide', dhruvNote: 'Dhruv is an illustrative character who represents the farmers SEED X serves. Demo accounts named Dhruv are synthetic.',
     portraitPending: 'Approved portrait pending', principlesTitle: 'Principles',
-    pr1: 'Farmer-first, not feature-first.', pr2: 'Hindi and English from day one.', pr3: 'Accurate, dated information over impressive numbers.',
+    pr1: 'Farmer-first, not feature-first.', pr2: 'Ten Indian languages from day one.', pr3: 'Accurate, dated information over impressive numbers.',
     pr4: 'Transparent costs and user-controlled decisions.', pr5: 'Collect only the data a service needs.', pr6: 'Security is architecture, not a checkbox.',
   },
   how: {
@@ -146,6 +147,7 @@ const en = {
     vis3d: 'Network view', vis2d: 'Map view', disable3d: '3D is turned off in settings.',
   },
   orders: {
+    paymentNote: 'Payment status: not tracked by SEED X. Payment is settled directly between buyer and farmer; no payment gateway is integrated yet.',
     title: 'Orders', lead: 'Every order keeps a snapshot of the agreed terms and a permanent timeline.', none: 'No orders yet', number: 'Order',
     timeline: 'Timeline', terms: 'Agreed terms', parties: 'Parties', schedulePickup: 'Schedule pickup', pickupDate: 'Pickup date', markInTransit: 'Mark in transit',
     confirmReceipt: 'Confirm receipt', complete: 'Mark completed', cancel: 'Cancel order', dispute: 'Raise dispute', assignLogistics: 'Assign transport partner',
@@ -219,7 +221,7 @@ const en = {
   notFound: { title: 'Page not found', lead: 'The page you are looking for does not exist.', home: 'Go home' },
   hero: {
     alt: 'A farmer looks across rain-washed fields towards a collection centre where produce is loaded onto a truck; a road leads to a sunlit town under a passing golden-hour shower.',
-    lead: 'List your harvest, meet real buyer demand, see what you actually take home, and explore shared deliveries with nearby farms - all in Hindi and English.',
+    lead: 'List your harvest, meet real buyer demand, see what you actually take home, and explore shared deliveries with nearby farms - in ten Indian languages.',
     autoNote: 'Auto shows a default ambience. It is not live weather - no weather service is connected.',
     scroll: 'Scroll to explore the harvest journey',
     trustTitle: 'Trust & sources', trustLead: 'Every number on SEED X says where it came from and how fresh it is. Sample data is always labelled.',
@@ -239,6 +241,50 @@ const en = {
     t3: 'Nearby farms, one smarter truck.', d3: 'ClusterCart checks every compatible harvest nearby, compares separate trips with one pooled route, and recommends pooling only when it genuinely costs less - with the reasons shown.',
     t4: 'One coordinated route, a permanent record.', d4: 'Stock is reserved atomically when the farmer accepts. Pickup, transit and delivery are recorded; the buyer confirming receipt is the proof of delivery.',
     t5: 'Straight to the buyers who need it.', d5: 'Hostels, restaurants and retailers see traceable produce and their landed cost - always shown separately from what the farmer actually takes home.',
+  },
+  lang: {
+    label: 'Language', choose: 'Choose language', reviewNote: 'Translations are machine-assisted and awaiting native-speaker review. English is shown where a translation is missing.',
+  },
+  centre: {
+    farmer: 'Farmer Command Centre', farmerLead: 'Your listings, offers, orders and clients at a glance.',
+    buyer: 'Buyer Procurement Centre', buyerLead: 'Requirements, offers to answer, deliveries and suppliers.',
+    seeds: 'Seed Seller Centre', seedsLead: 'Products, stock and seed orders.',
+    logistics: 'Logistics Centre', logisticsLead: 'Pickups to schedule and deliveries in progress.', admin: 'Admin Control Centre', open: 'Open',
+    openListings: 'Open listings', offersToAnswer: 'Offers to answer', activeOrders: 'Active orders', completedSales: 'Completed sales (gross)',
+    openRequirements: 'Open requirements', completedSpend: 'Completed purchases', activeProducts: 'Active products', lowStock: 'Low stock (under 10 packs)',
+    newSeedOrders: 'New seed orders', inFulfilment: 'In fulfilment', toSchedule: 'To schedule', scheduled: 'Pickup scheduled', inTransit: 'In transit', allJobs: 'All jobs',
+  },
+  contacts: {
+    clientsTitle: 'My clients', clientsLead: 'Buyers you have traded with, are talking to or saved. Notes are private to you.',
+    suppliersTitle: 'My suppliers', suppliersLead: 'Farmers you buy from, are negotiating with or saved. Notes are private to you.',
+    stage: 'Relationship', favourites: 'Favourites only', favourite: 'Favourite', empty: 'No contacts yet',
+    emptyClients: 'Buyers appear here after they make an offer, or when you save them from an order.',
+    emptySuppliers: 'Farmers appear here after you make an offer, or when you save them from an order.',
+    fromHistory: 'From trade history', completed: 'Completed', activeOrders: 'Active', offers: 'Offers', tradedValue: 'Completed value', last: 'Last activity',
+    note: 'Private note', notePrivate: 'Only you can see this note.', editNote: 'Edit note', saved: 'Saved',
+    saveClient: 'Save as client', saveSupplier: 'Save as supplier', inClients: 'In my clients', inSuppliers: 'In my suppliers',
+    stages: { lead: 'Lead', saved: 'Saved', enquiry: 'Enquiry', active: 'Active order', existing_client: 'Existing client', repeat_client: 'Repeat client' },
+  },
+  notif: {
+    preferences: 'Notification preferences', prefsLead: 'Choose which optional updates you receive. Order, account and security notices are always delivered.',
+    prefsSaved: 'Preferences saved', always: 'Always on', email: 'Also email me (when available)',
+    emailPending: 'Email delivery is not active yet: the platform owner has not configured an email provider. Your choice is saved.',
+    view: 'View', category: 'Category', unread: 'Unread', archive: 'Archive', unarchive: 'Move to inbox',
+    views: { inbox: 'Inbox', unread: 'Unread', archived: 'Archived' },
+    categories: { offers: 'Offers', orders: 'Orders', seeds: 'Seed orders', matches: 'ClusterCart', listings: 'Listings', account: 'Account', security: 'Security' },
+  },
+  market: {
+    sort: 'Sort by', category: 'Category', minQty: 'Minimum quantity', minPrice: 'Min ₹ per unit', maxPrice: 'Max ₹ per unit',
+    priceHint: "Prices compare in each listing's own unit. Pick a crop for like-for-like results.", harvestFrom: 'Harvested on or after',
+    hideDemo: 'Hide demo records', saveSearch: 'Save this search', searchSaved: 'Search saved', allListings: 'All listings', recent: 'Recent', clearRecent: 'Clear',
+    sorts: { newest: 'Newest first', price_asc: 'Price: low to high', price_desc: 'Price: high to low', qty_desc: 'Largest quantity', ending: 'Ending soonest' },
+    chip: { minQty: 'Qty ≥', minPrice: '₹ ≥', maxPrice: '₹ ≤', harvestFrom: 'Harvest from', grade: 'Grade' },
+  },
+  catalogue: {
+    title: 'Crop catalogue', lead: 'Add crops, translate names into all ten languages and switch crops on or off. Every change is audited.',
+    add: 'Add crop', code: 'Code', category: 'Category', shelf: 'Shelf life (days)', sort: 'Sort order', active: 'Active (shown in pickers)', names: 'Names',
+    saved: 'Catalogue updated', inactive: 'Inactive', missing: '{{count}} translations missing',
+    mfaNote: 'Saving needs an MFA-verified admin session; the server rejects every other request.',
   },
   scene: { fallback: 'Illustration: farms connected to a collection hub and a town buyer at golden hour.', loading: 'Loading 3D scene…', failed: '3D scene unavailable - showing illustration.' },
 }

@@ -30,3 +30,6 @@ qa/
 !.env.example
 supabase/.temp/
 backups/
+test-results/
+playwright-report/
+release/

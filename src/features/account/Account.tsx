@@ -12,6 +12,8 @@ import { friendlyError } from '@/lib/errors'
 import { readPrefs, writePrefs } from '@/lib/prefs'
 import { Badge, Button, Card, EmptyState, ErrorState, LinkButton, Notice, PageHeader, PageLoader, SelectField, Sheet, StatusBadge, TextAreaField, TextField, cx } from '@/components/ui'
 import { LanguageSwitch } from '@/components/Layout'
+import { NotificationPreferences } from '@/features/notifications/Notifications'
+import { RoleCentres } from '@/features/dashboard/Centres'
 
 // ---------------------------------------------------------------------------------- schemes
 export function SchemesPage({ savedOnly = false }: { savedOnly?: boolean }) {
@@ -198,6 +200,7 @@ export function DashboardPage() {
   return (
     <div>
       <PageHeader title={t('dashboard.title', { name: profile?.display_name ?? '' })} lead={t('dashboard.lead')} />
+      <RoleCentres />
       <div className="grid gap-6 lg:grid-cols-[1fr_1.3fr]">
         <Card className="p-5">
           <h2 className="text-lg font-extrabold">{t('dashboard.checklist')}</h2>
@@ -276,7 +279,7 @@ export function ProfilePage() {
 }
 
 export function SettingsPage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { refresh } = useAuth()
   const [disable3d, setDisable3d] = useState(readPrefs().disable3d)
   const [enrol, setEnrol] = useState<{ id: string; qr: string; secret: string } | null>(null)
@@ -296,7 +299,8 @@ export function SettingsPage() {
     <div className="max-w-2xl">
       <PageHeader title={t('settings.title')} />
       <div className="grid gap-5">
-        <Card className="flex items-center justify-between p-5"><span className="font-bold">{t('settings.language')}</span><LanguageSwitch /></Card>
+        <Card className="grid gap-2 p-5"><div className="flex items-center justify-between"><span className="font-bold">{t('settings.language')}</span><LanguageSwitch /></div>{i18n.language !== 'en' && <p className="text-sm text-charcoal-700">{t('lang.reviewNote')}</p>}</Card>
+        <NotificationPreferences />
         <Card className="p-5"><label className="flex min-h-11 items-center gap-3 font-bold"><input type="checkbox" className="size-5 accent-forest-700" checked={disable3d} onChange={(e) => { setDisable3d(e.target.checked); writePrefs({ disable3d: e.target.checked }) }} />{t('settings.disable3d')}</label></Card>
         <Card className="grid gap-3 p-5">
           <h2 className="flex items-center gap-2 text-lg font-extrabold"><ShieldCheck aria-hidden className="size-5" />{t('settings.mfaTitle')}</h2>

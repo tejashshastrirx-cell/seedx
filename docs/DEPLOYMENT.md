@@ -1,11 +1,13 @@
 # SEED X - Deployment
 
 ## Supabase (`jssvwvhqlmijxujquksw`, ap-south-1)
-Migrations 01-06 and the demo seed are applied; `run-clustercart` is deployed (verify_jwt on).
+Migrations 01-07 (incl. `20261031130000_catalogue_relationships_notifications`, applied 2026-10-31 via the Supabase MCP after verifying the project ref) and the demo seed are applied; `run-clustercart` is deployed (verify_jwt on).
 New migration: add `supabase/migrations/<timestamp>_name.sql`, test with `./scripts/db-local.sh --test`, then `npx supabase db push --project-ref jssvwvhqlmijxujquksw` (review the diff first). Regenerate types after schema changes.
 Edge Function: `npx supabase functions deploy run-clustercart --project-ref jssvwvhqlmijxujquksw`; set `npx supabase secrets set ALLOWED_ORIGINS=https://your-domain`.
 
 ## Cloudflare Pages
+**Status 2026-10-31: not deployed.** The Cloudflare connector attached to this workspace is the deprecated *Workers Bindings* server (it can list Workers and manage D1/KV/R2 but cannot upload a Pages or Workers deployment), no Cloudflare API token is available to the build environment, and the GitHub repository does not exist yet. Owner chose: private GitHub repo + Pages Git integration.
+
 1. Push the repo to GitHub (private). 2. Pages → Create project → connect repo. 3. Build `npm run build`, output `dist`, Node 22.
 4. Env vars (Production + Preview): `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY` only.
 5. `public/_headers` (CSP/security headers) and `public/_redirects` (SPA fallback) ship automatically.
@@ -15,4 +17,4 @@ Edge Function: `npx supabase functions deploy run-clustercart --project-ref jssv
 `npx playwright test` against the deployed URL (set `baseURL`), check deep-link refresh (e.g. `/marketplace/<id>`), headers via `curl -I`.
 
 ## Rollback
-Pages: promote the previous deployment. Database: forward-fix migration; restore from backup if data is affected (see SECURITY.md → backups).
+Pages: promote the previous deployment. Database: forward-fix migration; restore from backup if data is affected (see `BACKUP_RESTORE.md`).

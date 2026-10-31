@@ -25,12 +25,20 @@ export function qty(n: number | string | null | undefined, unit?: Unit | string)
   return unit ? `${s} ${unit}` : s
 }
 
-export function date(d: string | null | undefined, locale = 'en-IN'): string {
+// Dates follow the UI language (month names localised) but keep Latin digits (-u-nu-latn) so
+// numbers read the same across all ten languages. Money and quantities stay en-IN grouping.
+let uiLocale = 'en-IN'
+export function setFormatLanguage(lang: string) {
+  uiLocale = lang === 'en' ? 'en-IN' : `${lang}-IN-u-nu-latn`
+}
+export function currentFormatLocale() { return uiLocale }
+
+export function date(d: string | null | undefined, locale = uiLocale): string {
   if (!d) return '-'
   return new Date(d.length === 10 ? `${d}T00:00:00` : d).toLocaleDateString(locale, { day: 'numeric', month: 'short', year: 'numeric' })
 }
 
-export function dateTime(d: string | null | undefined, locale = 'en-IN'): string {
+export function dateTime(d: string | null | undefined, locale = uiLocale): string {
   if (!d) return '-'
   return new Date(d).toLocaleString(locale, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
 }

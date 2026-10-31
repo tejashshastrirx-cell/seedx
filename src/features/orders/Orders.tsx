@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Bell, CheckCheck, MapPin, Package, Phone, Truck } from 'lucide-react'
+import { MapPin, Package, Phone, Truck } from 'lucide-react'
 import { toast } from 'sonner'
 import type { Unit } from '@shared/clustercart'
 import { supabase } from '@/lib/supabase'
@@ -12,6 +12,7 @@ import { date, dateTime, perUnit, qty, rupees } from '@/lib/format'
 import { friendlyError } from '@/lib/errors'
 import { Badge, Button, Card, DemoBadge, EmptyState, ErrorState, PageHeader, PageLoader, SelectField, StatusBadge, TextAreaField, TextField } from '@/components/ui'
 import { NetBackPanel } from '@/features/marketplace/NetBackPanel'
+import { SaveContactButton } from '@/features/network/Network'
 
 export function OrdersPage() {
   const { t } = useTranslation()
@@ -121,11 +122,14 @@ export function OrderDetailPage() {
   return (
     <div>
       <Link to="/orders" className="text-sm font-semibold">← {t('nav.orders')}</Link>
-      <PageHeader title={`${t('orders.number')} ${o.order_number}`} lead={`${name(o.commodity_id)} · ${snap.listing_title}`} actions={<><StatusBadge status={o.status} label={t(`orders.${o.status}`)} /><DemoBadge show={o.is_demo} /></>} />
+      <PageHeader title={`${t('orders.number')} ${o.order_number}`} lead={`${name(o.commodity_id)} · ${snap.listing_title}`} actions={<><StatusBadge status={o.status} label={t(`orders.${o.status}`)} /><DemoBadge show={o.is_demo} />
+        {role === 'farmer' && <SaveContactButton counterpartyId={o.buyer_id} kind="client" />}
+        {role === 'buyer' && <SaveContactButton counterpartyId={o.farmer_id} kind="supplier" />}</>} />
       <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr]">
         <div className="grid gap-6">
           <Card className="p-5">
             <h2 className="text-lg font-extrabold">{t('orders.terms')}</h2>
+            <p className="mt-1 text-sm text-charcoal-700" data-testid="payment-note">{t('orders.paymentNote')}</p>
             <dl className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
               {[[t('common.quantity'), qty(o.quantity, o.unit)], [t('common.price'), perUnit(o.price_paise_per_unit, o.unit)], [t('common.grade'), String(snap.grade)], [t('listing.deliveryTerms'), t(`listing.${o.delivery_terms}`)]].map(([k, v]) => (
                 <div key={k} className="rounded-2xl bg-forest-50 p-3"><dt className="text-xs font-semibold text-charcoal-500">{k}</dt><dd className="tabular font-extrabold text-forest-800">{v}</dd></div>
@@ -235,27 +239,3 @@ export function LogisticsPage() {
   )
 }
 
-export function NotificationsPage() {
-  const { t } = useTranslation()
-  const qc = useQueryClient()
-  const q = useQuery({ queryKey: ['notifications', 'list'], queryFn: async () => { const { data, error } = await supabase.from('notifications').select('*').order('created_at', { ascending: false }).limit(100); if (error) throw error; return data } })
-  const markAll = useMutation({ mutationFn: async () => { await supabase.rpc('mark_notifications_read', {}) }, onSuccess: () => void qc.invalidateQueries({ queryKey: ['notifications'] }) })
-  if (q.isLoading) return <PageLoader />
-  return (
-    <div>
-      <PageHeader title={t('notifications.title')} actions={<Button variant="secondary" onClick={() => markAll.mutate()}><CheckCheck aria-hidden className="size-4" />{t('notifications.markAll')}</Button>} />
-      {!q.data?.length ? <EmptyState icon={<Bell aria-hidden />} title={t('notifications.none')} /> : (
-        <ul className="grid gap-2">
-          {q.data.map((n) => (
-            <li key={n.id}>
-              <Link to={n.link ?? '/dashboard'} className={`card flex gap-3 p-4 no-underline ${n.read_at ? 'opacity-75' : 'border-gold-300'}`}>
-                {!n.read_at && <span className="mt-2 size-2.5 shrink-0 rounded-full bg-gold-400" aria-label="unread" />}
-                <div><p className="font-bold text-forest-800">{n.title}</p>{n.body && <p className="text-sm text-charcoal-700">{n.body}</p>}<p className="text-xs text-charcoal-500">{dateTime(n.created_at)}</p></div>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  )
-}

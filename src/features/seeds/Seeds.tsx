@@ -6,11 +6,12 @@ import { BadgeCheck, Package, Plus, ShieldQuestion, SlidersHorizontal, Sprout } 
 import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/app/auth'
-import { INDIAN_STATES, useCommodities, useCommodityName } from '@/lib/catalog'
+import { INDIAN_STATES, useCommodityName } from '@/lib/catalog'
 import { date, dateTime, qty, rupees, toPaise } from '@/lib/format'
 import { friendlyError } from '@/lib/errors'
 import { newIdempotencyKey } from '@/lib/idempotency'
 import { Badge, Button, Card, DemoBadge, EmptyState, ErrorState, LinkButton, Notice, PageHeader, PageLoader, SelectField, Sheet, Skeleton, StatusBadge, TextAreaField, TextField, cx } from '@/components/ui'
+import { CommodityOptions } from '@/components/CommodityOptions'
 
 type SeedRow = { id: string; seller_id: string; commodity_id: number; variety_name: string; brand: string; pack_size: number; pack_unit: string; price_paise: number; season: string;
   certification_ref: string | null; certification_verified_at: string | null; certification_verified_note: string | null; is_demo: boolean; seed_inventory: { available_packs: number } | null }
@@ -23,9 +24,8 @@ function CertBadge({ p }: { p: Pick<SeedRow, 'certification_ref' | 'certificatio
 }
 
 export function SeedsPage() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const [params, setParams] = useSearchParams()
-  const commodities = useCommodities()
   const name = useCommodityName()
   const [sheet, setSheet] = useState(false)
   const f = { crop: params.get('crop') ?? '', season: params.get('season') ?? '', brand: params.get('brand') ?? '', max: params.get('max') ?? '', verified: params.get('verified') === '1', stock: params.get('stock') === '1', sort: params.get('sort') ?? 'price' }
@@ -46,7 +46,7 @@ export function SeedsPage() {
   })
   const controls = (
     <div className="grid gap-4">
-      <SelectField label={t('common.commodity')} value={f.crop} onChange={(e) => set({ crop: e.target.value })}><option value="">{t('common.all')}</option>{commodities.data?.map((c) => <option key={c.id} value={c.id}>{i18n.language === 'hi' ? c.name_hi : c.name_en}</option>)}</SelectField>
+      <SelectField label={t('common.commodity')} value={f.crop} onChange={(e) => set({ crop: e.target.value })}><option value="">{t('common.all')}</option><CommodityOptions /></SelectField>
       <SelectField label={t('seeds.season')} value={f.season} onChange={(e) => set({ season: e.target.value })}><option value="">{t('seeds.allSeasons')}</option>{['kharif', 'rabi', 'zaid'].map((s) => <option key={s} value={s}>{t(`seeds.${s}`)}</option>)}</SelectField>
       <TextField label={t('seeds.brand')} defaultValue={f.brand} onBlur={(e) => set({ brand: e.target.value })} />
       <TextField label={`${t('prices.max')} ₹`} inputMode="decimal" defaultValue={f.max} onBlur={(e) => set({ max: e.target.value })} />
@@ -223,9 +223,8 @@ export function SeedOrdersPage() {
 }
 
 export function SeedManagePage() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const { user } = useAuth()
-  const commodities = useCommodities()
   const qc = useQueryClient()
   const [open, setOpen] = useState(false)
   const [form, setForm] = useState({ commodity_id: '', variety_name: '', brand: '', pack_size: '', pack_unit: 'kg', price: '', season: 'rabi', lot_number: '', germination: '', expiry: '', cert: '', description: '', shipping: '0', states: 'Madhya Pradesh' })
@@ -278,7 +277,7 @@ export function SeedManagePage() {
       )}
       <Sheet open={open} onClose={() => setOpen(false)} title={t('seeds.addProduct')} footer={<Button className="flex-1" loading={create.isPending} onClick={() => create.mutate()} disabled={!form.commodity_id || !form.variety_name || !form.brand || !form.pack_size || Number.isNaN(toPaise(form.price))}>{t('common.save')}</Button>}>
         <div className="grid gap-3">
-          <SelectField label={t('common.commodity')} {...F('commodity_id')}><option value="">—</option>{commodities.data?.map((c) => <option key={c.id} value={c.id}>{i18n.language === 'hi' ? c.name_hi : c.name_en}</option>)}</SelectField>
+          <SelectField label={t('common.commodity')} {...F('commodity_id')}><option value="">—</option><CommodityOptions /></SelectField>
           <TextField label={t('common.variety')} {...F('variety_name')} /><TextField label={t('seeds.brand')} {...F('brand')} />
           <div className="grid grid-cols-2 gap-3"><TextField label={t('seeds.pack')} inputMode="decimal" {...F('pack_size')} /><SelectField label={t('common.unit')} {...F('pack_unit')}><option>kg</option><option>g</option></SelectField></div>
           <TextField label={`${t('common.price')} (₹)`} inputMode="decimal" {...F('price')} />

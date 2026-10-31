@@ -6,19 +6,19 @@ import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YA
 import { LineChart as ChartIcon, SlidersHorizontal } from 'lucide-react'
 import { convertPricePerUnit, type Unit } from '@shared/clustercart'
 import { supabase } from '@/lib/supabase'
-import { INDIAN_STATES, useCommodities, useCommodityName } from '@/lib/catalog'
+import { INDIAN_STATES, useCommodityName } from '@/lib/catalog'
 import { date, daysAgo, rupees, toPaise, unitShort } from '@/lib/format'
 import { friendlyError } from '@/lib/errors'
 import { Badge, Button, Card, EmptyState, ErrorState, Notice, PageHeader, Pager, SelectField, Sheet, Skeleton, TextField, cx } from '@/components/ui'
+import { CommodityOptions } from '@/components/CommodityOptions'
 
 const PAGE = 25
 const TYPES = ['mandi_wholesale', 'msp_reference', 'seed_input'] as const
 const DEFAULTS: Record<string, string> = { type: 'mandi_wholesale', show: 'quintal', sort: 'newest' }
 
 export function PricesPage({ explorer = false }: { explorer?: boolean }) {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const [params, setParams] = useSearchParams()
-  const commodities = useCommodities()
   const name = useCommodityName()
   const [sheet, setSheet] = useState(false)
   const get = (k: string) => params.get(k) ?? DEFAULTS[k] ?? ''
@@ -92,7 +92,7 @@ export function PricesPage({ explorer = false }: { explorer?: boolean }) {
           ))}
         </div>
       </fieldset>
-      <SelectField label={t('common.commodity')} value={f.crop} onChange={(e) => set({ crop: e.target.value })}><option value="">{t('common.all')}</option>{commodities.data?.map((c) => <option key={c.id} value={c.id}>{i18n.language === 'hi' ? c.name_hi : c.name_en}</option>)}</SelectField>
+      <SelectField label={t('common.commodity')} value={f.crop} onChange={(e) => set({ crop: e.target.value })}><option value="">{t('common.all')}</option><CommodityOptions /></SelectField>
       {f.type !== 'seed_input' && <>
         <SelectField label={t('prices.state')} value={f.state} onChange={(e) => set({ state: e.target.value })}><option value="">{t('common.all')}</option>{INDIAN_STATES.map((s) => <option key={s}>{s}</option>)}</SelectField>
         <TextField label={t('prices.district')} defaultValue={f.district} onBlur={(e) => e.target.value !== f.district && set({ district: e.target.value })} />

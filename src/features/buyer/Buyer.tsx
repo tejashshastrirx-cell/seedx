@@ -10,7 +10,7 @@ import { toast } from 'sonner'
 import { DEFAULT_TRANSPORT, runClusterCart, type DemandInput, type Grade, type RunResult, type SupplyCandidate, type Unit } from '@shared/clustercart'
 import { supabase, SUPABASE_URL } from '@/lib/supabase'
 import { useAuth } from '@/app/auth'
-import { DISTRICT_CENTROIDS, INDIAN_STATES, useCommodities, useCommodityName, useVarieties } from '@/lib/catalog'
+import { DISTRICT_CENTROIDS, INDIAN_STATES, useCommodityName, useVarieties } from '@/lib/catalog'
 import { date, perUnit, qty, rupees, toPaise } from '@/lib/format'
 import { friendlyError } from '@/lib/errors'
 import { readPrefs, prefersReducedMotion } from '@/lib/prefs'
@@ -18,6 +18,7 @@ import { Badge, Button, Card, DemoBadge, EmptyState, ErrorState, LinkButton, Not
 import { OffersInbox } from '@/features/farmer/Farmer'
 import { ClusterNetwork2D } from '@/scenes/ClusterNetwork2D'
 import { webglAvailable } from '@/scenes/SplineScene'
+import { CommodityOptions } from '@/components/CommodityOptions'
 
 const ClusterNetwork3D = lazy(() => import('@/scenes/ClusterNetwork3D'))
 
@@ -57,11 +58,10 @@ export function BuyerOverviewPage() {
 const plusDays = (n: number) => new Date(Date.now() + n * 86_400_000).toISOString().slice(0, 10)
 
 export function RequirementsPage() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const { user, profile } = useAuth()
   const qc = useQueryClient()
   const demand = useMyDemand()
-  const commodities = useCommodities()
   const varieties = useVarieties()
   const name = useCommodityName()
   const [showForm, setShowForm] = useState(false)
@@ -105,7 +105,7 @@ export function RequirementsPage() {
         <Card className="mb-6 p-5">
           <form className="grid gap-4 sm:grid-cols-3" onSubmit={handleSubmit((v) => create.mutate(v))} noValidate>
             <SelectField label={t('common.commodity')} {...register('commodity_id')} error={errors.commodity_id && t('errors.validation')}>
-              <option value="">—</option>{commodities.data?.map((c) => <option key={c.id} value={c.id}>{i18n.language === 'hi' ? c.name_hi : c.name_en}</option>)}
+              <option value="">—</option><CommodityOptions />
             </SelectField>
             <SelectField label={t('common.variety')} optional {...register('variety_id')}><option value="">{t('common.any')}</option>{varieties.data?.filter((v) => v.commodity_id === cid).map((v) => <option key={v.id} value={v.id}>{v.name_en}</option>)}</SelectField>
             <SelectField label={t('demand.minGrade')} {...register('min_grade')}>{['A', 'B', 'C', 'ungraded'].map((g) => <option key={g}>{g}</option>)}</SelectField>
