@@ -76,6 +76,8 @@
 @keyframes seedx-mist { from { transform: translate3d(-6%, 0, 0) } to { transform: translate3d(8%, -6%, 0) } }
 .header-over-hero { background: linear-gradient(180deg, rgb(8 32 22 / .55), transparent) !important; border-color: transparent !important; backdrop-filter: none !important; }
 .header-over-hero nav a, .header-over-hero > div > div a, .header-over-hero > div > div button { color: #F5F0E4; }
+.header-over-hero label, .header-over-hero select { color: #F5F0E4; }
+.header-over-hero select option { color: #1f2a24; }
 .header-over-hero nav a[aria-current='page'] { background: rgb(255 255 255 / .12); }
 
 /* Hero motion (disabled automatically by the reduced-motion rule above). */
