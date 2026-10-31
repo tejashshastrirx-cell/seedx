@@ -9,7 +9,7 @@ Edge Function: `npx supabase functions deploy run-clustercart --project-ref jssv
 **Status 2026-10-31: not deployed.** The Cloudflare connector attached to this workspace is the deprecated *Workers Bindings* server (it can list Workers and manage D1/KV/R2 but cannot upload a Pages or Workers deployment), no Cloudflare API token is available to the build environment, and the GitHub repository does not exist yet. Owner chose: private GitHub repo + Pages Git integration.
 
 1. Push the repo to GitHub (private). 2. Pages → Create project → connect repo. 3. Build `npm run build`, output `dist`, Node 22.
-4. Env vars (Production + Preview): `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY` only.
+4. Public build config is committed in `.env.production` (`VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY` - both browser-safe). Dashboard build variables are optional overrides. Never add secret keys there.
 5. `public/_headers` (CSP/security headers) ships automatically. SPA routing: `wrangler.jsonc` (`not_found_handling: single-page-application`) for Workers; Pages treats a project without `404.html` as an SPA. Do not add `_redirects` - Workers rejects `/* /index.html 200` as an infinite loop.
 6. Supabase Auth → URL configuration: Site URL = production domain; redirect `https://your-domain/auth/callback` (+ preview domain).
 

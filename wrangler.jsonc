@@ -3,7 +3,7 @@
   // SPA routing is handled by not_found_handling, so no _redirects file is needed.
   // Security headers come from public/_headers.
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "seedxkf",
+  "name": "seedxsss",
   "compatibility_date": "2026-10-23",
   "assets": {
     "directory": "./dist",

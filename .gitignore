@@ -28,6 +28,7 @@ qa/
 .env
 .env.*
 !.env.example
+!.env.production
 supabase/.temp/
 backups/
 test-results/
