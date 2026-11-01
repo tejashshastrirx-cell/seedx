@@ -1,0 +1,17 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:I;src:url(file:///usr/share/fonts/opentype/inter/InterDisplay-Bold.otf)}
+@font-face{font-family:IM;src:url(file:///usr/share/fonts/opentype/inter/Inter-Medium.otf)}
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#0E2E21}
+.bg{position:absolute;inset:0;background:url(hero.png) center/cover;filter:saturate(.9)}
+.sh{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 55%,rgba(14,46,33,.55),rgba(14,46,33,.93) 70%)}
+.c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#F5F0E4}
+.logo{display:flex;align-items:center;gap:28px}.logo img{width:120px;height:120px;border-radius:26px}
+.word{font:800 112px I;letter-spacing:4px}.word b{color:#E5A63B}
+h1{font:700 76px I;margin:56px 0 0;letter-spacing:-1px}
+p{font:500 34px IM;color:#E6F1E7;margin:26px 0 0;opacity:.92}
+.rule{width:160px;height:4px;background:#E5A63B;border-radius:2px;margin-top:48px}
+.u{font:500 28px IM;color:#E5A63B;margin-top:30px}
+</style></head><body><div class="bg"></div><div class="sh"></div><div class="c">
+<div class="logo"><img src="seedx-mark.svg"><div class="word">SEED <b>X</b></div></div>
+<h1 id="h"></h1><div class="rule"></div><p id="p"></p><div class="u" id="u"></div></div>
+<script>const q=new URLSearchParams(location.search);h.textContent=q.get('h');p.textContent=q.get('p');u.textContent=q.get('u')||''</script></body></html>
